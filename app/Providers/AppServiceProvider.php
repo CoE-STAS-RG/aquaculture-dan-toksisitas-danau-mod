@@ -10,7 +10,7 @@ use App\Models\SensorReading;
 use Illuminate\Support\Facades\View;
 use App\Models\Device;
 use Carbon\Carbon;
-
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
 
@@ -68,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
 
         $view->with('latestNotifications', $latestNotifications);
     });
+    Paginator::useTailwind();
     }
     
 }

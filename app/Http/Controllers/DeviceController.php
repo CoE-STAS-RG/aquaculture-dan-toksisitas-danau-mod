@@ -89,7 +89,7 @@ public function show(Device $device, Request $request)
         }
     }
 
-    $readings = $query->limit(100)->get(); // <-- Pastikan ini dijalankan dulu
+    $readings = $query->paginate(20);// <-- Pastikan ini dijalankan dulu
 
     // Pindahkan foreach setelah $readings didefinisikan
     $notifications = [];

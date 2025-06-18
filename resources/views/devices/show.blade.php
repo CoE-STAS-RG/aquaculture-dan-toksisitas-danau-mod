@@ -95,6 +95,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                          <div class="mt-4 px-4 mb-5">
+                                {{ $readings->withQueryString()->links() }}
+                            </div>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
                     </div>
