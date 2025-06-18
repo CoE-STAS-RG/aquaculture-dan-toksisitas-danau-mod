@@ -1,29 +1,44 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false, sidebarOpen: false }" class="bg-white border-b border-gray-100">
+
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
+                
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('user.dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
+                
+                {{-- <!-- Sidebar Toggle -->
+                <div class="relative">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                        <i class="fas fa-bars text-xl me-3"></i>
+                    </button>
+
+                    <!-- Sidebar Panel -->
+                    <div x-show="sidebarOpen" @click.outside="sidebarOpen = false" class="absolute z-50 left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-md">
+                        <a href="{{ route('user.dashboard') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Dashboard
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            Manajemen Ikan
+                        </a>
+                    </div>
+                </div> --}}
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('user.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    {{-- <x-nav-link :href="route('kategori')" :active="request()->routeIs('kategori')">
-                        {{ __('Kategori') }}
+                   <x-nav-link :href="route('index-fish')" :active="request()->routeIs('index-fish')">
+                        {{ __('Grafik Pertumbuhan') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('resep')" :active="request()->routeIs('resep')">
-                        {{ __('Resep') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('pesanan')" :active="request()->routeIs('pesanan')">
-                        {{ __('Pesanan') }}
-                    </x-nav-link> --}}
+                   
                   
             
 
@@ -33,17 +48,7 @@
 
             <!-- Search and Icons -->
             <div class="flex items-center">
-                <!-- Search Field -->
-                <div class="hidden sm:block mx-4 w-64">
-                    <div class="relative rounded-md shadow-sm">
-                        <input type="text" name="search" id="search" class="block w-full rounded-md border-gray-300 pl-3 pr-10 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Cari...">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+                
 
                 <!-- Icons -->
                 <div class="hidden sm:flex sm:items-center space-x-4">
@@ -52,6 +57,47 @@
                     
 
                     <!-- Settings Icon -->
+
+                    <div class="relative">
+                        {{-- Notifikasi Button --}}
+                        <div class="relative">
+                            {{-- Notifikasi Button --}}
+                            <button id="notifBtn" class="flex items-center p-2 text-gray-500 hover:text-gray-700 focus:outline-none transition relative">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 
+                                        .538-.214 1.055-.595 1.436L4 17h5m6 0v5a2 2 0 11-2 2H9a2 2 0 011-1.995V17h5z" />
+                                </svg>
+                                <span class="sr-only">Notifications</span>
+                                <span class="absolute top-0 right-0 inline-block w-2 h-2 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+                            </button>
+
+                            {{-- Dropdown --}}
+                            <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50">
+                                <div class="p-3">
+                                    <h4 class="font-semibold text-gray-700 dark:text-white mb-2">Notifikasi Terbaru</h4>
+                                    <ul id="notifList" class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+                                        {{-- Diisi oleh JavaScript --}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="notifDropdown"
+                            class="hidden absolute right-0 mt-2 w-80 max-w-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 transition-all duration-200">
+                            <div class="p-4">
+                                <h4 class="text-base font-semibold text-gray-800 dark:text-white mb-3">Notifikasi Terbaru</h4>
+                                <ul id="notifList"
+                                    class="space-y-3 text-sm text-gray-700 dark:text-gray-300 max-h-64 overflow-y-auto pr-2">
+                                    <!-- Diisi oleh JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">
@@ -141,3 +187,33 @@
         </div>
     </div>
 </nav>
+
+<script>
+    const notifBtn = document.getElementById('notifBtn');
+    const notifDropdown = document.getElementById('notifDropdown');
+    const notifList = document.getElementById('notifList');
+
+    const latestNotifications = @json($latestNotifications);
+
+    notifBtn.addEventListener('click', () => {
+        notifDropdown.classList.toggle('hidden');
+        if (!notifDropdown.classList.contains('hidden')) {
+            notifList.innerHTML = '';
+
+            if (latestNotifications.length === 0) {
+                notifList.innerHTML = '<li>Tidak ada notifikasi baru.</li>';
+            } else {
+                latestNotifications.forEach(item => {
+                    notifList.innerHTML += `<li class="border-b border-gray-200 dark:border-gray-600 pb-2">${item}</li>`;
+                });
+            }
+        }
+    });
+
+    // Optional: klik di luar dropdown, maka dropdown hilang
+    document.addEventListener('click', function(e) {
+        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+            notifDropdown.classList.add('hidden');
+        }
+    });
+</script>

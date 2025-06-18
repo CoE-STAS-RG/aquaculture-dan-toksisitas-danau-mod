@@ -137,9 +137,10 @@
                                                     Detail
                                                 </a>
 
-                                                <a href="{{ route('devices.edit', $device->id) }}" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300">
+                                                <button onclick="openEditModal({{ $device->id }}, '{{ $device->name }}', '{{ $device->device_code }}', '{{ $device->location ?? '' }}', '{{ $device->description ?? '' }}')" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300">
                                                     Edit
-                                                </a>
+                                                </button>
+
 
                                                 <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus perangkat ini?')">
                                                     @csrf
@@ -159,6 +160,70 @@
                     @endif
                 </div>
             </div>
+            <!-- Modal Edit Perangkat -->
+            <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center flex bg-black bg-opacity-50">
+                <div class="m-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6 ">
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Edit Perangkat</h2>
+                    <form id="editDeviceForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="device_id" id="editDeviceId">
+
+                        <div class="mb-4">
+                            <label for="editName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Perangkat</label>
+                            <input type="text" id="editName" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="editCode" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kode Device</label>
+                            <input type="text" id="editCode" name="device_code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="editLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi</label>
+                            <input type="text" id="editLocation" name="location" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="editDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
+                            <textarea id="editDescription" name="description" rows="3" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                        </div>
+
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
+                                Batal
+                            </button>
+                            <button type="submit" class="px-4 py-2 text-black bg-yellow-600 rounded hover:bg-yellow-700">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                function openEditModal(id, name, code, location, description) {
+                    document.getElementById('editModal').classList.remove('hidden');
+                    document.getElementById('editDeviceForm').action = `/devices/${id}`;
+                    document.getElementById('editName').value = name;
+                    document.getElementById('editCode').value = code;
+                    document.getElementById('editLocation').value = location;
+                    document.getElementById('editDescription').value = description;
+                }
+
+                function closeEditModal() {
+                    document.getElementById('editModal').classList.add('hidden');
+                }
+
+                // Optional: Tutup modal jika klik di luar
+                window.addEventListener('click', function(e) {
+                    const modal = document.getElementById('editModal');
+                    if (e.target === modal) {
+                        closeEditModal();
+                    }
+                });
+            </script>
+
+
 
             <!-- Recent Readings Section -->
             <div class="overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
@@ -237,4 +302,5 @@
             </div>
         </div>
     </div>
+    
 </x-app-layout>

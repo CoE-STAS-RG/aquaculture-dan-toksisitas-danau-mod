@@ -20,9 +20,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
+    <!-- Sidebar -->
+       
+
     <div class="min-h-screen bg-gray-100">
         @include('layouts.navigation')
-
+              <!-- Sidebar -->
+         
         <!-- Page Heading -->
         @isset($header)
             <header class="bg-white shadow">
@@ -41,7 +45,8 @@
 
     <!-- Hanya load Alpine.js sekali saja -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
-   
+   <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Bootstrap JS + Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

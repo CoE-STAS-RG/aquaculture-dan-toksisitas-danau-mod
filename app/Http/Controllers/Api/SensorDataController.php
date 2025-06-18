@@ -56,7 +56,7 @@ class SensorDataController extends Controller
     public function index(Request $request)
 {
     $device = Device::where('device_code', $request->device_code)->first();
-
+    
     if (!$device) {
         return response()->json([
             'status' => 'error',

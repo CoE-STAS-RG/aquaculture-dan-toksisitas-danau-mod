@@ -14,7 +14,7 @@
     {{-- Tambahkan Lottie CDN --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col items-center justify-center min-h-screen p-6">
+<body class="bg-gray-900 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col items-center justify-center min-h-screen p-6">
 
     <!-- Lottie Animation -->
      <div id="lottie-container" style="width: 300px; height: 300px;"></div>

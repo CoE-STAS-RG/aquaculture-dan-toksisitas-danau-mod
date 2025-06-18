@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Http\Requests\StoreDeviceRequest;
-
+use App\Models\SensorReading;
 
 class DeviceController extends Controller
 {
@@ -59,6 +59,13 @@ class DeviceController extends Controller
 public function show(Device $device, Request $request)
 {
     $this->authorize('view', $device);
+     $latest = SensorReading::latest()->first();
+
+    $thresholds = [
+        'ph' => ['min' => 6.5, 'max' => 8.5],
+        'temperature' => ['min' => 20, 'max' => 30],
+        'dissolved_oxygen' => ['min' => 4, 'max' => 10],
+    ];
 
     $query = $device->readings()->orderBy('reading_time', 'desc');
 
@@ -82,10 +89,26 @@ public function show(Device $device, Request $request)
         }
     }
 
-    $readings = $query->limit(100)->get();
+    $readings = $query->limit(100)->get(); // <-- Pastikan ini dijalankan dulu
 
-    return view('devices.show', compact('device', 'readings'));
+    // Pindahkan foreach setelah $readings didefinisikan
+    $notifications = [];
+
+    foreach ($readings as $reading) {
+        if ($reading->ph < $thresholds['ph']['min'] || $reading->ph > $thresholds['ph']['max']) {
+            $notifications[] = "PH berada di luar batas normal ({$reading->ph}) pada {$reading->reading_time}";
+        }
+        if ($reading->temperature < $thresholds['temperature']['min'] || $reading->temperature > $thresholds['temperature']['max']) {
+            $notifications[] = "Suhu berada di luar batas normal ({$reading->temperature}°C) pada {$reading->reading_time}";
+        }
+        if ($reading->dissolved_oxygen < $thresholds['dissolved_oxygen']['min']) {
+            $notifications[] = "Oksigen Terlarut rendah ({$reading->dissolved_oxygen} mg/L) pada {$reading->reading_time}";
+        }
+    }
+
+    return view('devices.show', compact('device', 'readings', 'notifications', 'latest'));
 }
+
 
     public function edit(Device $device)
 {
@@ -122,5 +145,26 @@ public function destroy(Device $device)
     return redirect()->route('user.dashboard')
                     ->with('success', 'Device deleted successfully!');
 }
+
+public function latestReadings(Device $device)
+{
+    $readings = $device->readings()
+        ->orderBy('reading_time', 'desc')
+        ->limit(10) // ambil 10 data terbaru
+        ->get()
+        ->paginate(50)
+        ->map(function ($reading) {
+            return [
+                'time' => $reading->reading_time->format('d-m-Y H:i'),
+                'temperature' => $reading->temperature,
+                'ph' => $reading->ph,
+                'do' => $reading->dissolved_oxygen,
+                'risk' => $reading->risk_level
+            ];
+        });
+
+    return response()->json($readings);
+}
+
 
 }

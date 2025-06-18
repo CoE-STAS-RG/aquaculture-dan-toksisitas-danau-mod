@@ -6,7 +6,8 @@ use App\Http\Controllers\ProductController;
 use App\Models\Product;
 use App\Models\User;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CartController;
+
+use App\Http\Controllers\FishFeedingController;
 use App\Http\Controllers\DeviceController;
 use App\Models\Device;
 use Illuminate\Support\Facades\Auth;
@@ -56,8 +57,12 @@ Route::middleware(['auth', 'role:user'])->group(function () {
             'latestReadings' => $latestReadings
         ]);
     })->name('user.dashboard');
-    
-    
+
+
+    Route::get('/user/manajemen-ikan', [FishFeedingController::class, 'index'])->name('index-fish');
+Route::get('/user/manajemen-ikan/tambah', [FishFeedingController::class, 'create'])->name('create-fish'); // Tambahkan ini
+Route::post('/user/manajemen-ikan/tambah', [FishFeedingController::class, 'store'])->name('store-fish');
+
     
     // Device Management
     Route::resource('devices', DeviceController::class);
