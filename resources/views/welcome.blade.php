@@ -14,10 +14,10 @@
     {{-- Tambahkan Lottie CDN --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
 </head>
-<body class="bg-gray-900 dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col items-center justify-center min-h-screen p-6">
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col items-center justify-center min-h-screen p-6">
 
     <!-- Lottie Animation -->
-     <div id="lottie-container" style="width: 300px; height: 300px;"></div>
+     <div id="lottie-container" style="width: 300px; height: 300px; "></div>
     <div class="text-center mb-10 mt-6">
         <h1 class="text-4xl font-bold mb-2">Selamat Datang
 
@@ -30,7 +30,7 @@
             <div class="flex justify-center gap-4">
                 @auth
                     <a href="{{ url('/user/dashboard') }}"
-                        class="w-full text-center px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                        class="w-full text-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-green-700 transition">
                         Dashboard
                     </a>
                 @else
