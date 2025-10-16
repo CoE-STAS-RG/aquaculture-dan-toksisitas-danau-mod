@@ -13,6 +13,7 @@ use App\Models\Device;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
+    // return "hello";
     return view('welcome');
 });
 
@@ -28,6 +29,7 @@ Route::middleware('auth','role:admin')->group(function () {
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
     // Tambahkan route untuk user management
     Route::resource('users', UserController::class);
     Route::get('/admin/dashboard', [ProductController::class, 'index'])->name('admin.dashboard');

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('dissolved_oxygen');
             $table->float('risk_level');
             $table->timestamp('reading_time')->useCurrent();
+            $table->timestamps();
         });
     }
 

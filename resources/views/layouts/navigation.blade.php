@@ -152,7 +152,7 @@
     const notifBtnMobile = document.getElementById('notifBtnMobile');
     const notifDropdown = document.getElementById('notifDropdown');
     const notifList = document.getElementById('notifList');
-    const latestNotifications = @json($latestNotifications);
+    const latestNotifications = {};
 
     function toggleNotif() {
         notifDropdown.classList.toggle('hidden');

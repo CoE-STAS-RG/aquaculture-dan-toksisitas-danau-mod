@@ -13,6 +13,7 @@ class Admin extends Component
      */
     public function render()
     {
+        // return "hello";
         return view('layouts.admin');
     }
 }
