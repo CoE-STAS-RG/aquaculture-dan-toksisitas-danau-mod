@@ -23,6 +23,8 @@ class ApiRegisterController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        dd($request);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

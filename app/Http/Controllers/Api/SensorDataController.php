@@ -15,10 +15,11 @@ class SensorDataController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'device_code' => 'required|exists:devices,device_code',
-            'temperature' => 'required|numeric',
+            'suhuDHT' => 'required|numeric',
+            'suhu' => 'required|numeric',
             'ph' => 'required|numeric|between:0,14',
-            'dissolved_oxygen' => 'required|numeric',
-            'risk_level' => 'required|numeric|between:0,100',
+            'do' => 'required|numeric',
+            'risiko' => 'required|numeric|between:0,100',
         ]);
 
         if ($validator->fails()) {
@@ -33,10 +34,11 @@ class SensorDataController extends Controller
 
         $reading = SensorReading::create([
             'device_id' => $device->id,
-            'temperature' => $request->temperature,
+            'env_temperature' => $request->suhuDHT,
+            'water_temperature' => $request->suhu,
             'ph' => $request->ph,
-            'dissolved_oxygen' => $request->dissolved_oxygen,
-            'risk_level' => $request->risk_level,
+            'dissolved_oxygen' => $request->do,
+            'risk_level' => $request->risiko,
         ]);
 
         return response()->json([

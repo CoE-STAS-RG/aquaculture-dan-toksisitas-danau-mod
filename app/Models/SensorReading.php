@@ -39,7 +39,8 @@ class SensorReading extends Model
     public $timestamps = 'true' ; // <--- tambahkan ini
     protected $fillable = [
         'device_id',
-        'temperature',
+        'env_temperature',
+        'water_temperature',
         'ph',
         'dissolved_oxygen',
         'risk_level'

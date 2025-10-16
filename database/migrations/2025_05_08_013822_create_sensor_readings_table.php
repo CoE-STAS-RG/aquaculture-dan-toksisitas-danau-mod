@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('sensor_readings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('device_id')->constrained()->onDelete('cascade');
-            $table->float('temperature');
+            $table->float('env_temperature');
+            $table->float('water_temperature');
             $table->float('ph');
             $table->float('dissolved_oxygen');
             $table->float('risk_level');
