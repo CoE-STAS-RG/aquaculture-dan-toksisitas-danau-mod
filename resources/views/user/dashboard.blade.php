@@ -269,8 +269,8 @@
                                                 <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->created_at->format('d M Y H:i') }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->temperature, 2) }}</div>
-                                            </td>
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->water_temperature, 2) }}</div>
+                                            </td> 
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->ph, 2) }}</div>
                                             </td>

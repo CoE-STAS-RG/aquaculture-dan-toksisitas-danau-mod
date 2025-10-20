@@ -83,7 +83,7 @@
                                 @forelse($readings as $reading)
                                     <tr>
                                         <td class="px-4 py-2">{{ \Carbon\Carbon::parse($reading->reading_time)->format('d-m-Y H:i') }}</td>
-                                        <td class="px-4 py-2">{{ $reading->temperature }}</td>
+                                        <td class="px-4 py-2">{{ $reading->env_temperature }}</td>
                                         <td class="px-4 py-2">{{ $reading->ph }}</td>
                                         <td class="px-4 py-2">{{ $reading->dissolved_oxygen }}</td>
                                         <td class="px-4 py-2">{{ $reading->risk_level }}</td>
@@ -137,6 +137,7 @@
                     },
                     y: {
                         beginAtZero: true,
+                        max: 40,
                         grid: {
                             display: false
                         }
@@ -226,7 +227,7 @@
                         return `
                             <tr>
                                 <td class="px-4 py-2">${time}</td>
-                                <td class="px-4 py-2">${reading.temperature}</td>
+                                <td class="px-4 py-2">${reading.env_temperature}</td>
                                 <td class="px-4 py-2">${reading.ph}</td>
                                 <td class="px-4 py-2">${reading.dissolved_oxygen}</td>
                                 <td class="px-4 py-2">${reading.risk_level}</td>
@@ -239,7 +240,7 @@
                     // Ambil 10 data terbaru terakhir (atau sesuaikan)
                     const latest = result.data.slice(0, 10).reverse();
                     const labels = latest.map(r => new Date(r.reading_time).toLocaleTimeString('id-ID'));
-                    const temps = latest.map(r => r.temperature);
+                    const temps = latest.map(r => r.env_temperature);
                     const phs = latest.map(r => r.ph);
                     const dos = latest.map(r => r.dissolved_oxygen);
 
@@ -360,7 +361,7 @@
                                     (createdAt.getMonth() + 1).toString().padStart(2, '0');
 
                     // Ambil nilai sensor
-                    const newTemp = parseFloat(data.temperature);
+                    const newTemp = parseFloat(data.env_temperature);
                     const newPh = parseFloat(data.ph);
                     const newDo = parseFloat(data.dissolved_oxygen);
 
@@ -391,7 +392,7 @@
   {{-- const labels = @json($readings->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i d/m')));
 
 //         // Data masing-masing sensor
-//         const temps = @json($readings->pluck('temperature'));
+//         const temps = @json($readings->pluck('env_temperature'));
 //         const phs = @json($readings->pluck('ph'));
 //         const dos = @json($readings->pluck('dissolved_oxygen'));
 
