@@ -137,7 +137,7 @@
                     },
                     y: {
                         beginAtZero: true,
-                        max: 40,
+                        max: 60,
                         grid: {
                             display: false
                         }
@@ -169,6 +169,7 @@
                     },
                     y: {
                         beginAtZero: true,
+                        max: 14,
                         grid: {
                             display: false
                         }
