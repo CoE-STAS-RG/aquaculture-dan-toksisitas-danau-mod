@@ -89,7 +89,12 @@ public function show(Device $device, Request $request)
         }
     }
 
-    $readings = $query->paginate(20);// <-- Pastikan ini dijalankan dulu
+    $readings = $query->paginate(10);// <-- Pastikan ini dijalankan dulu
+    // dd($device);
+    // dd($readings);
+    $readings->withPath('/api/sensor-data?device_code=' . $device->device_code);
+
+
 
     // Pindahkan foreach setelah $readings didefinisikan
     $notifications = [];
@@ -105,6 +110,7 @@ public function show(Device $device, Request $request)
             $notifications[] = "Oksigen Terlarut rendah ({$reading->dissolved_oxygen} mg/L) pada {$reading->reading_time}";
         }
     }
+
 
     return view('devices.show', compact('device', 'readings', 'notifications', 'latest'));
 }

@@ -1,5 +1,5 @@
 <x-app-layout>
-   
+   <!-- <h1>HERE</h1> -->
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -96,7 +96,7 @@
                             </tbody>
                         </table>
                           <div class="mt-4 px-4 mb-5">
-                                {{ $readings->withQueryString()->links() }}
+                                <!-- {{ $readings->withQueryString()->links() }} -->
                             </div>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -219,9 +219,9 @@
 
         async function fetchLatestData() {
             try {
-                const response = await fetch(`/api/sensor-data?device_code=${deviceCode}`);
+                const response = await fetch(`/api/sensor-data?device_code={{ $device->device_code }}`);
                 const result = await response.json();
-
+                console.log(result);
                 if (result.status === "success") {
                     const rows = result.data.map(reading => {
                         const time = new Date(reading.reading_time).toLocaleString('id-ID');
@@ -288,8 +288,8 @@
 
 </x-app-layout>
 
-
- {{-- <script>
+<!-- 
+ <script>
         // Data dummy untuk grafik
         const labelsLive = [];
         const tempsLive = [];
@@ -389,178 +389,4 @@
                 });
         }, 3000); // tarik data tiap 3 detik
 
-    </script> --}}
-  {{-- const labels = @json($readings->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i d/m')));
-
-//         // Data masing-masing sensor
-//         const temps = @json($readings->pluck('env_temperature'));
-//         const phs = @json($readings->pluck('ph'));
-//         const dos = @json($readings->pluck('dissolved_oxygen'));
-
-//         // Fungsi buat grafik garis
-//         function createLineChart(canvasId, label, data, color) {
-//             const ctx = document.getElementById(canvasId).getContext('2d');
-//             new Chart(ctx, {
-//                 type: 'line',
-//                 data: {
-//                     labels: labels,
-//                     datasets: [{
-//                         label: label,
-//                         data: data,
-//                         borderColor: color,
-//                         backgroundColor: color + '33', // transparan
-//                         fill: false,
-//                         tension: 0.3
-//                     }]
-//                 },
-//                 options: {
-//                     responsive: true,
-//                     plugins: {
-//                         legend: { position: 'top' },
-//                         title: { display: true, text: label }
-//                     },
-//                     scales: {
-//                         x: { grid: { display: false } },
-//                         y: { grid: { display: false } }
-//                     }
-//                 }
-//             });
-//         }
-
-//         // Buat grafik suhu, pH, dan DO
-//         createLineChart('tempChart', 'Suhu (°C)', temps, 'rgb(255, 99, 132)');
-//         createLineChart('phChart', 'pH', phs, 'rgb(54, 162, 235)');
-//         createLineChart('doChart', 'DO (mg/L)', dos, 'rgb(75, 192, 192)');
-
-//             const latestPh = phs.length > 0 ? phs[phs.length - 1] : 0;
-//         const latestDo = dos.length > 0 ? dos[dos.length - 1] : 0;
-
-//         // Termometer pH
-//         new Chart(document.getElementById('thermoPhChart').getContext('2d'), {
-//             type: 'bar',
-//             data: {
-//                 labels: ['pH'],
-//                 datasets: [{
-//                     label: 'pH',
-//                     data: [latestPh],
-//                     backgroundColor: 'rgba(54, 162, 235, 0.8)',
-//                     borderWidth: 1
-//                 }]
-//             },
-//             options: {
-//                 indexAxis: 'y',
-//                 responsive: false,
-//                 scales: {
-//                     x: {
-//                         min: 0,
-//                         max: 14,
-//                         title: {
-//                             display: true,
-//                             text: 'pH'
-//                         }
-//                     }
-//                 },
-//                 plugins: {
-//                     legend: { display: false },
-//                     title: {
-//                         display: true,
-//                         text: `pH Terakhir: ${latestPh}`
-//                     }
-//                 }
-//             }
-//         });
-
-//         // Termometer DO
-//         new Chart(document.getElementById('thermoDoChart').getContext('2d'), {
-//             type: 'bar',
-//             data: {
-//                 labels: ['DO'],
-//                 datasets: [{
-//                     label: 'DO (mg/L)',
-//                     data: [latestDo],
-//                     backgroundColor: 'rgba(75, 192, 192, 0.8)',
-//                     borderWidth: 1
-//                 }]
-//             },
-//             options: {
-//                 indexAxis: 'y',
-//                 responsive: false,
-//                 scales: {
-//                     x: {
-//                         min: 0,
-//                         max: 20,
-//                         title: {
-//                             display: true,
-//                             text: 'mg/L'
-//                         }
-//                     }
-//                 },
-//                 plugins: {
-//                     legend: { display: false },
-//                     title: {
-//                         display: true,
-//                         text: `DO Terakhir: ${latestDo} mg/L`
-//                     }
-//                 }
-//             }
-//         });
-//         let timeIndex = 1;
-
-//         // Inisialisasi data dummy awal
-//         let labelsLive = [...labels];
-//         let tempsLive = [...temps];
-//         let phsLive = [...phs];
-//         let dosLive = [...dos];
-
-//         // Ambil context
-//         const tempCtx = document.getElementById('tempChart').getContext('2d');
-//         const phCtx = document.getElementById('phChart').getContext('2d');
-//         const doCtx = document.getElementById('doChart').getContext('2d');
-
-//         const tempChart = new Chart(tempCtx, {
-//             type: 'line',
-//             data: {
-//                 labels: labelsLive,
-//                 datasets: [{
-//                     label: 'Suhu (°C)',
-//                     data: tempsLive,
-//                     borderColor: 'rgb(255, 99, 132)',
-//                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
-//                     fill: false,
-//                     tension: 0.3
-//                 }]
-//             },
-//             options: { responsive: true }
-//         });
-
-//         const phChart = new Chart(phCtx, {
-//             type: 'line',
-//             data: {
-//                 labels: labelsLive,
-//                 datasets: [{
-//                     label: 'pH',
-//                     data: phsLive,
-//                     borderColor: 'rgb(54, 162, 235)',
-//                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
-//                     fill: false,
-//                     tension: 0.3
-//                 }]
-//             },
-//             options: { responsive: true }
-//         });
-
-//         const doChart = new Chart(doCtx, {
-//             type: 'line',
-//             data: {
-//                 labels: labelsLive,
-//                 datasets: [{
-//                     label: 'DO (mg/L)',
-//                     data: dosLive,
-//                     borderColor: 'rgb(75, 192, 192)',
-//                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-//                     fill: false,
-//                     tension: 0.3
-//                 }]
-//             },
-//             options: { responsive: true }
-//         }); --}}
+    </script>  -->

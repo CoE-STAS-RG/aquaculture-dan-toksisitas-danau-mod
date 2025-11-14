@@ -76,7 +76,7 @@
                             <p>Anda belum memiliki perangkat. Tambahkan perangkat untuk memulai monitoring.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto" id="device-list-table">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
@@ -235,7 +235,7 @@
                             <p>Belum ada data pembacaan dari perangkat Anda.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto" id="recent-readings-table">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
