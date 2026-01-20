@@ -36,9 +36,6 @@ class Device extends Model
 {
     use HasFactory;
 
-   
-
-
     protected $fillable = [
         'device_code',
         'name',
@@ -55,5 +52,10 @@ class Device extends Model
     public function readings()
     {
         return $this->hasMany(SensorReading::class);
+    }
+
+        public function sensorReadings()
+    {
+        return $this->hasMany(SensorReading::class, 'device_id', 'id');
     }
 }
