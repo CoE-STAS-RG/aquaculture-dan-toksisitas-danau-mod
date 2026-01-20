@@ -14,8 +14,6 @@ use App\Models\SensorReading;
 class DeviceController extends Controller
 {
     use AuthorizesRequests;
-
-
     
     public function index()
     {
@@ -59,25 +57,33 @@ class DeviceController extends Controller
 public function show(Device $device, Request $request)
 {
     $this->authorize('view', $device);
-     $latest = SensorReading::latest()->first();
 
+    // Ambil latest reading *per device*
+    $latest = $device->sensorReadings()->latest('reading_time')->first();
+
+    // Threshold untuk semua parameter
     $thresholds = [
         'ph' => ['min' => 6.5, 'max' => 8.5],
-        'temperature' => ['min' => 20, 'max' => 30],
+        'water_temperature' => ['min' => 20, 'max' => 30],
         'dissolved_oxygen' => ['min' => 4, 'max' => 10],
+        'turbidity_ntu' => ['max' => 5], // NTU ideal < 5 untuk akuakultur
+        'ec_s_m' => ['max' => 0.005],    // 5 mS/m = 0.005 S/m
+        'tds_ppm' => ['max' => 500],     // umumnya < 500 PPM
+        'orp_mv' => ['min' => 100, 'max' => 500], // ORP ideal
     ];
 
-    $query = $device->readings()->orderBy('reading_time', 'desc');
+    // Query utama
+    $query = $device->sensorReadings()->orderBy('reading_time', 'desc');
 
+    // Filter waktu
     if ($request->has('filter')) {
         $now = Carbon::now();
-
         switch ($request->filter) {
             case 'daily':
                 $query->whereDate('reading_time', $now->toDateString());
                 break;
             case 'weekly':
-                $query->whereBetween('reading_time', [$now->startOfWeek(), $now->endOfWeek()]);
+                $query->whereBetween('reading_time', [$now->copy()->startOfWeek(), $now->copy()->endOfWeek()]);
                 break;
             case 'monthly':
                 $query->whereMonth('reading_time', $now->month)
@@ -89,28 +95,46 @@ public function show(Device $device, Request $request)
         }
     }
 
-    $readings = $query->paginate(10);// <-- Pastikan ini dijalankan dulu
-    // dd($device);
-    // dd($readings);
-    $readings->withPath('/api/sensor-data?device_code=' . $device->device_code);
+    $readings = $query->paginate(10);
 
-
-
-    // Pindahkan foreach setelah $readings didefinisikan
+    // Notifikasi berdasarkan threshold
     $notifications = [];
-
     foreach ($readings as $reading) {
-        if ($reading->ph < $thresholds['ph']['min'] || $reading->ph > $thresholds['ph']['max']) {
-            $notifications[] = "PH berada di luar batas normal ({$reading->ph}) pada {$reading->reading_time}";
+        // pH
+        if ($reading->ph !== null && ($reading->ph < $thresholds['ph']['min'] || $reading->ph > $thresholds['ph']['max'])) {
+            $notifications[] = "pH berada di luar batas normal ({$reading->ph}) pada {$reading->reading_time->format('d M Y H:i')}";
         }
-        if ($reading->temperature < $thresholds['temperature']['min'] || $reading->temperature > $thresholds['temperature']['max']) {
-            $notifications[] = "Suhu berada di luar batas normal ({$reading->temperature}°C) pada {$reading->reading_time}";
+
+        // Water Temp
+        if ($reading->water_temperature !== null && ($reading->water_temperature < $thresholds['water_temperature']['min'] || $reading->water_temperature > $thresholds['water_temperature']['max'])) {
+            $notifications[] = "Suhu air berada di luar batas normal ({$reading->water_temperature}°C) pada {$reading->reading_time->format('d M Y H:i')}";
         }
-        if ($reading->dissolved_oxygen < $thresholds['dissolved_oxygen']['min']) {
-            $notifications[] = "Oksigen Terlarut rendah ({$reading->dissolved_oxygen} mg/L) pada {$reading->reading_time}";
+
+        // DO
+        if ($reading->dissolved_oxygen !== null && $reading->dissolved_oxygen < $thresholds['dissolved_oxygen']['min']) {
+            $notifications[] = "Oksigen Terlarut rendah ({$reading->dissolved_oxygen} mg/L) pada {$reading->reading_time->format('d M Y H:i')}";
+        }
+
+        // Turbidity
+        if ($reading->turbidity_ntu !== null && $reading->turbidity_ntu > $thresholds['turbidity_ntu']['max']) {
+            $notifications[] = "Turbidity tinggi ({$reading->turbidity_ntu} NTU) pada {$reading->reading_time->format('d M Y H:i')}";
+        }
+
+        // EC
+        if ($reading->ec_s_m !== null && $reading->ec_s_m > $thresholds['ec_s_m']['max']) {
+            $notifications[] = "Konduktivitas tinggi ({$reading->ec_s_m} S/m) pada {$reading->reading_time->format('d M Y H:i')}";
+        }
+
+        // TDS
+        if ($reading->tds_ppm !== null && $reading->tds_ppm > $thresholds['tds_ppm']['max']) {
+            $notifications[] = "TDS tinggi ({$reading->tds_ppm} PPM) pada {$reading->reading_time->format('d M Y H:i')}";
+        }
+
+        // ORP
+        if ($reading->orp_mv !== null && ($reading->orp_mv < $thresholds['orp_mv']['min'] || $reading->orp_mv > $thresholds['orp_mv']['max'])) {
+            $notifications[] = "ORP tidak ideal ({$reading->orp_mv} mV) pada {$reading->reading_time->format('d M Y H:i')}";
         }
     }
-
 
     return view('devices.show', compact('device', 'readings', 'notifications', 'latest'));
 }
@@ -154,23 +178,26 @@ public function destroy(Device $device)
 
 public function latestReadings(Device $device)
 {
-    $readings = $device->readings()
+    $readings = $device->sensorReadings()
         ->orderBy('reading_time', 'desc')
-        ->limit(10) // ambil 10 data terbaru
+        ->limit(10)
         ->get()
-        ->paginate(50)
         ->map(function ($reading) {
             return [
                 'time' => $reading->reading_time->format('d-m-Y H:i'),
-                'temperature' => $reading->temperature,
+                'env_temperature' => $reading->env_temperature,
+                'water_temperature' => $reading->water_temperature,
                 'ph' => $reading->ph,
                 'do' => $reading->dissolved_oxygen,
+                'turbidity_ntu' => $reading->turbidity_ntu,
+                'ec_s_m' => $reading->ec_s_m,
+                'tds_ppm' => $reading->tds_ppm,
+                'orp_mv' => $reading->orp_mv,
                 'risk' => $reading->risk_level
             ];
         });
 
     return response()->json($readings);
 }
-
 
 }
