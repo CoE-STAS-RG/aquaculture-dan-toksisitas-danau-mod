@@ -226,80 +226,85 @@
 
 
             <!-- Recent Readings Section -->
-            <div class="overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
-                <div class="p-6 bg-white dark:bg-gray-800">
-                    <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">Pembacaan Terakhir</h3>
-                    
-                    @if(auth()->user()->sensorReadings->isEmpty())
-                        <div class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-400">
-                            <p>Belum ada data pembacaan dari perangkat Anda.</p>
-                        </div>
-                    @else
-                        <div class="overflow-x-auto" id="recent-readings-table">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Perangkat
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Waktu
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Suhu (°C)
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            pH
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            DO (mg/L)
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Risiko
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    @foreach(auth()->user()->sensorReadings()->latest()->take(5)->get() as $reading)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $reading->device->name }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->created_at->format('d M Y H:i') }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->water_temperature, 2) }}</div>
-                                            </td> 
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->ph, 2) }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ number_format($reading->dissolved_oxygen, 2) }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @php
-                                                    $riskClass = '';
-                                                    if ($reading->risk_level > 70) {
-                                                        $riskClass = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-                                                    } elseif ($reading->risk_level > 30) {
-                                                        $riskClass = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-                                                    } else {
-                                                        $riskClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-                                                    }
-                                                @endphp
-                                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $riskClass }}">
-                                                    {{ number_format($reading->risk_level, 1) }}%
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
-                </div>
+<div class="overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
+    <div class="p-6 bg-white dark:bg-gray-800">
+        <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">Pembacaan Terakhir</h3>
+        
+        @if(auth()->user()->sensorReadings->isEmpty())
+            <div class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-400">
+                <p>Belum ada data pembacaan dari perangkat Anda.</p>
             </div>
+        @else
+            <div class="overflow-x-auto" id="recent-readings-table">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">Perangkat</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">Waktu</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">Suhu (°C)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">pH</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">DO (mg/L)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">Turbidity (NTU)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">EC (S/m)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">TDS (PPM)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">ORP (mV)</th>
+                            <th scope="col" class="px-4 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">Risiko</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        @foreach(auth()->user()->sensorReadings()->latest()->take(5)->get() as $reading)
+                            <tr>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $reading->device->name }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->created_at->format('d M Y H:i') }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->water_temperature ? number_format($reading->water_temperature, 2) : '-' }}</div>
+                                </td> 
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->ph ? number_format($reading->ph, 2) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->dissolved_oxygen ? number_format($reading->dissolved_oxygen, 2) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->turbidity_ntu ? number_format($reading->turbidity_ntu, 2) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->ec_s_m ? number_format($reading->ec_s_m, 4) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->tds_ppm ? number_format($reading->tds_ppm, 0) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->orp_mv ? number_format($reading->orp_mv, 1) : '-' }}</div>
+                                </td>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    @php
+                                        $risk = $reading->risk_level ?? 0;
+                                        $riskClass = '';
+                                        if ($risk > 70) {
+                                            $riskClass = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+                                        } elseif ($risk > 30) {
+                                            $riskClass = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+                                        } else {
+                                            $riskClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+                                        }
+                                    @endphp
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $riskClass }}">
+                                        {{ number_format($risk, 1) }}%
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+</div>
         </div>
     </div>
     

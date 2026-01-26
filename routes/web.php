@@ -78,6 +78,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 
 
     Route::get('/user/manajemen-ikan', [FishFeedingController::class, 'index'])->name('index-fish');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/user/manajemen-ikan/tambah', [FishFeedingController::class, 'create'])->name('create-fish'); // Tambahkan ini
     Route::post('/user/manajemen-ikan/tambah', [FishFeedingController::class, 'store'])->name('store-fish');
 
