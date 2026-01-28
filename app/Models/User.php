@@ -1,19 +1,17 @@
 <?php
-
 namespace App\Models;
-
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory,  Notifiable;
-     use HasApiTokens, Notifiable;
+    use HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,8 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'phone' ,
-        'photo'// tambahkan ini
+        'phone',
+        'photo' // tambahkan ini
     ];
 
     /**
@@ -50,14 +48,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     public function devices()
-{
-    return $this->hasMany(Device::class);
-}
+    {
+        return $this->hasMany(Device::class);
+    }
 
-
-public function sensorReadings()
-{
-    return $this->hasManyThrough(SensorReading::class, Device::class);
-}
+    public function sensorReadings()
+    {
+        return $this->hasManyThrough(
+            SensorReading::class,  // Model tujuan
+            Device::class,         // Model perantara
+            'user_id',             // Foreign key di tabel devices
+            'device_id',           // Foreign key di tabel sensor_readings
+            'id',                  // Local key di tabel users
+            'id'                   // Local key di tabel devices
+        )->select(
+            'sensor_readings.*',   // Ambil semua kolom dari sensor_readings
+            'devices.id as device_table_id' // Tambah alias untuk devices.id
+        );
+    }
 }

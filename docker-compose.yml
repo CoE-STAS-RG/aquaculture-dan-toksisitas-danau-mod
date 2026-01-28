@@ -3,9 +3,9 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: AquaCulture
+      MYSQL_DATABASE: tanifest
       MYSQL_USER: admin
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     ports:
       # host:container

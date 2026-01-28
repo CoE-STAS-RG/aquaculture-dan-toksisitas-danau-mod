@@ -14,19 +14,20 @@ Route::post('/register', [ApiRegisterController::class, 'register']);
 Route::post('/login', [ApiLoginController::class, 'login']);
 
 Route::post('/sensor-data', [SensorDataController::class, 'store']);
-    Route::get('/sensor-data', [SensorDataController::class, 'index']);
-    
+Route::get('/sensor-data', [SensorDataController::class, 'index']);
+Route::get('/sensor-data/device/{deviceCode}', [SensorDataController::class, 'getByDeviceCode']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
 
 
 
 
-   
-    
+
+
      Route::get('/fish-feedings', [ApiFishFeedingController::class, 'index']);
     Route::post('/fish-feedings', [ApiFishFeedingController::class, 'store']);
-    
+
 
     Route::get('/devices', [ApiDeviceController::class, 'index']);
     Route::post('/devices', [ApiDeviceController::class, 'store']);

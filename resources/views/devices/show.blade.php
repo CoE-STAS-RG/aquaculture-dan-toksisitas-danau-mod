@@ -5,7 +5,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class=" dark:bg-gray-800 overflow-hidden  sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    
+
                     {{-- Info Box --}}
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-blue-100 shadow-md  dark:bg-blue-900 p-4 rounded">
@@ -71,7 +71,7 @@
         <canvas id="orpChart" height="120"></canvas>
     </div>
 </div>
-                
+
                     {{-- Filter --}}
                     <div class="mb-4 mt-10">
                         <form method="GET" action="{{ route('devices.show', $device->id) }}">
@@ -88,7 +88,7 @@
 
 
                     {{-- Table --}}
-                    
+
                     <h3 class="text-lg font-semibold mb-4">Latest Readings</h3>
 <div class="bg-white dark:bg-gray-800 shadow-md overflow-x-auto rounded">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
@@ -306,20 +306,19 @@
 </script>
 
     {{-- termometer chart --}}
-    
+
     <script>
     const deviceCode = "{{ $device->device_code }}";
-    const tableBody = document.querySelector("tbody");
 
     async function fetchLatestData() {
         try {
-            const response = await fetch(`/api/sensor-data?device_code={{ $device->device_code }}`);
+            const response = await fetch(`/api/sensor-data/device/${deviceCode}`);
             const result = await response.json();
 
             if (result.status === "success" && Array.isArray(result.data)) {
                 // Ambil max 10 data terbaru
                 const latest = result.data.slice(0, 10).reverse();
-                const labels = latest.map(r => 
+                const labels = latest.map(r =>
                     new Date(r.reading_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
                 );
 
@@ -388,7 +387,7 @@
     setInterval(fetchLatestData, 5000);
 </script>
 
-   
+
     <script>
         const notifications = @json($notifications);
         let currentIndex = 0;

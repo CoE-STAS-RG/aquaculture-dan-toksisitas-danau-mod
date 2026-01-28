@@ -56,24 +56,49 @@ class SensorDataController extends Controller
     }
 
     public function index(Request $request)
-{
-    $device = Device::where('device_code', $request->device_code)->first();
-    
-    if (!$device) {
+    {
+        $device = Device::where('device_code', $request->device_code)->first();
+
+        if (!$device) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid device code'
+            ], 404);
+        }
+
+        $readings = SensorReading::where('device_id', $device->id)
+            ->select('id', 'reading_time', 'env_temperature', 'water_temperature', 'ph', 'dissolved_oxygen', 'turbidity_ntu', 'ec_s_m', 'tds_ppm', 'orp_mv', 'risk_level')
+            ->orderBy('reading_time', 'desc')
+            ->limit(100)
+            ->get();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid device code'
-        ], 404);
+            'status' => 'success',
+            'data' => $readings
+        ]);
     }
 
-    $readings = SensorReading::where('device_id', $device->id)
-        ->orderBy('created_at', 'desc')
-        ->get();
+    public function getByDeviceCode($deviceCode)
+    {
+        $device = Device::where('device_code', $deviceCode)->first();
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $readings
-    ]);
-}
+        if (!$device) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid device code'
+            ], 404);
+        }
+
+        $readings = SensorReading::where('device_id', $device->id)
+            ->select('id', 'reading_time', 'env_temperature', 'water_temperature', 'ph', 'dissolved_oxygen', 'turbidity_ntu', 'ec_s_m', 'tds_ppm', 'orp_mv', 'risk_level')
+            ->orderBy('reading_time', 'desc')
+            ->limit(100)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $readings
+        ]);
+    }
 
 }

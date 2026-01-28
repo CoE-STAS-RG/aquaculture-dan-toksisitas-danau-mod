@@ -1,52 +1,257 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aquaculture & Water Toxicity Monitoring System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> A comprehensive Laravel-based monitoring system for aquaculture water quality management and toxicity detection.
 
-## About Laravel
+## 🌊 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Real-time Water Quality Monitoring**
+  - pH levels
+  - Water temperature
+  - Dissolved oxygen (DO)
+  - Turbidity (NTU)
+  - Electrical conductivity (EC)
+  - Total Dissolved Solids (TDS)
+  - Oxidation-Reduction Potential (ORP)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Device Management**
+  - Register multiple monitoring devices
+  - Track device locations
+  - View device history and readings
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Fish Feeding Management**
+  - Track feeding schedules
+  - Monitor fish weight growth
+  - Record feed types and amounts
 
-## Learning Laravel
+- **Product Marketplace**
+  - Browse aquaculture products
+  - Shopping cart functionality
+  - Product management for admin
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **User Management**
+  - Role-based access (Admin/User)
+  - User authentication and authorization
+  - Profile management
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Alerts & Notifications**
+  - Threshold-based warnings
+  - Water quality alerts
+  - Automatic risk assessment
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Quick Start
 
-## Laravel Sponsors
+### Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL >= 8.0
+- Web Server (Nginx/Apache)
 
-### Premium Partners
+### Local Development
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+# Clone repository
+git clone [repository-url]
+cd aquaculture-dan-toksisitas-danau-mod
 
-## Contributing
+# Install dependencies
+composer install
+npm install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Configure database in .env
+# DB_DATABASE=your_database
+# DB_USERNAME=your_username
+# DB_PASSWORD=your_password
+
+# Run migrations
+php artisan migrate
+
+# Build assets
+npm run dev
+
+# Start development server
+php artisan serve
+```
+
+Visit `http://localhost:8000`
+
+## 📦 Deployment to VPS
+
+**IMPORTANT:** Before deploying to production, read the comprehensive deployment guide:
+
+📚 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete step-by-step deployment guide
+
+📋 **[PRE-DEPLOYMENT-CHECKLIST.md](PRE-DEPLOYMENT-CHECKLIST.md)** - Checklist before going live
+
+### Quick Deploy (Linux VPS)
+
+```bash
+# 1. Upload files to VPS
+# 2. Copy production environment
+cp .env.production .env
+
+# 3. Edit .env with your credentials
+nano .env
+
+# 4. Run deployment script
+chmod +x deploy.sh
+./deploy.sh
+
+# 5. Setup web server (see DEPLOYMENT.md)
+```
+
+### Quick Deploy (Windows)
+
+```powershell
+# 1. Copy production environment
+Copy-Item .env.production .env
+
+# 2. Edit .env with your credentials
+
+# 3. Run deployment script
+.\deploy.ps1
+```
+
+## 🛠️ Available Scripts
+
+### Deployment
+- `deploy.sh` / `deploy.ps1` - Full deployment script
+- `backup.sh` - Database and files backup
+- `troubleshoot.sh` / `troubleshoot.ps1` - Diagnostic tool
+
+### Artisan Commands
+
+```bash
+# Cache management
+php artisan cache:clear       # Clear application cache
+php artisan config:clear      # Clear config cache
+php artisan route:clear       # Clear route cache
+php artisan view:clear        # Clear compiled views
+
+# Optimization
+php artisan config:cache      # Cache config
+php artisan route:cache       # Cache routes
+php artisan view:cache        # Cache views
+php artisan optimize          # Optimize framework
+
+# Database
+php artisan migrate           # Run migrations
+php artisan migrate:rollback  # Rollback last migration
+php artisan migrate:status    # Show migration status
+```
+
+## 🔒 Security
+
+### Production Checklist
+
+- ✅ Set `APP_DEBUG=false`
+- ✅ Set `APP_ENV=production`
+- ✅ Use strong database passwords
+- ✅ Enable HTTPS/SSL
+- ✅ Set proper file permissions (755/775)
+- ✅ Keep dependencies updated
+- ✅ Regular backups
+
+### File Permissions (Linux)
+
+```bash
+# Application files
+chmod -R 755 /var/www/your-app
+
+# Writable directories
+chmod -R 775 storage bootstrap/cache
+
+# Owner
+chown -R www-data:www-data /var/www/your-app
+```
+
+## 📊 Monitoring & Logs
+
+### View Logs
+
+```bash
+# Linux/Mac
+tail -f storage/logs/laravel.log
+
+# Windows PowerShell
+Get-Content storage/logs/laravel.log -Wait
+```
+
+### Error Tracking
+
+All errors are logged to `storage/logs/laravel.log` with context information.
+
+## 🧪 Testing
+
+```bash
+# Run tests
+php artisan test
+
+# Run specific test
+php artisan test --filter TestName
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support & Troubleshooting
+
+### Common Issues
+
+**Error 500 - Internal Server Error**
+```bash
+# Check logs
+tail -f storage/logs/laravel.log
+
+# Clear cache
+php artisan optimize:clear
+
+# Check permissions
+chmod -R 775 storage bootstrap/cache
+```
+
+**Database Connection Failed**
+```bash
+# Check .env database credentials
+# Test connection
+php artisan migrate:status
+```
+
+**Missing Dependencies**
+```bash
+# Reinstall
+composer install
+npm install
+```
+
+### Getting Help
+
+1. Check logs: `storage/logs/laravel.log`
+2. Run troubleshooting: `./troubleshoot.sh`
+3. Review documentation: `DEPLOYMENT.md`
+4. Check Laravel documentation: https://laravel.com/docs
+
+## 📞 Contact
+
+For issues and questions, please open an issue on GitHub.
+
+---
+
+Built with ❤️ using Laravel
 
 ## Code of Conduct
 
