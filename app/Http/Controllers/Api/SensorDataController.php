@@ -20,6 +20,10 @@ class SensorDataController extends Controller
             'ph' => 'required|numeric|between:0,14',
             'do' => 'required|numeric',
             'risiko' => 'required|numeric|between:0,100',
+            'turbidity_ntu' => 'nullable|numeric',
+            'ec_s_m' => 'nullable|numeric',
+            'tds_ppm' => 'nullable|numeric',
+            'orp_mv' => 'nullable|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -32,6 +36,13 @@ class SensorDataController extends Controller
 
         $device = Device::where('device_code', $request->device_code)->first();
 
+        if (!$device) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid device code'
+            ], 404);
+        }
+
         $reading = SensorReading::create([
             'device_id' => $device->id,
             'env_temperature' => $request->suhuDHT,
@@ -39,6 +50,10 @@ class SensorDataController extends Controller
             'ph' => $request->ph,
             'dissolved_oxygen' => $request->do,
             'risk_level' => $request->risiko,
+            'turbidity_ntu' => $request->turbidity_ntu,
+            'ec_s_m' => $request->ec_s_m,
+            'tds_ppm' => $request->tds_ppm,
+            'orp_mv' => $request->orp_mv,
         ]);
 
         return response()->json([
@@ -46,13 +61,6 @@ class SensorDataController extends Controller
             'message' => 'Data saved successfully',
             'data' => $reading
         ], 201);
-
-        if (!$device) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid device code'
-            ], 404);
-        }
     }
 
     public function index(Request $request)
