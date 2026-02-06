@@ -109,22 +109,25 @@ class ApiDeviceController extends Controller
             'message' => 'Device deleted successfully.'
         ]);
     }
-    public function latestReadings(Device $device)
-{
-    $readings = $device->readings()
-        ->orderBy('reading_time', 'desc')
-        ->limit(10) // ambil 10 data terbaru
-        ->get()
-        ->map(function ($reading) {
-            return [
-                'time' => $reading->reading_time->format('d-m-Y H:i'),
-                'temperature' => $reading->temperature,
-                'ph' => $reading->ph,
-                'do' => $reading->dissolved_oxygen,
-                'risk' => $reading->risk_level
-            ];
-        });
 
-    return response()->json($readings);
-}
+    public function latestReadings(Device $device)
+    {
+        $this->authorize('view', $device);
+
+        $readings = $device->readings()
+            ->orderBy('reading_time', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($reading) {
+                return [
+                    'time' => $reading->reading_time->format('d-m-Y H:i'),
+                    'temperature' => $reading->temperature,
+                    'ph' => $reading->ph,
+                    'do' => $reading->dissolved_oxygen,
+                    'risk' => $reading->risk_level
+                ];
+            });
+
+        return response()->json($readings);
+    }
 }

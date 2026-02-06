@@ -32,10 +32,6 @@ class SensorReading extends Model
 {
     use HasFactory;
 
-    public $timestamps = true; 
-
-    protected $table = 'sensor_readings';
-
     protected $fillable = [
         'device_id',
         'env_temperature',
@@ -43,13 +39,6 @@ class SensorReading extends Model
         'ph',
         'dissolved_oxygen',
         'risk_level',
-
-        // Sensor baru
-        'turbidity_ntu',
-        'ec_s_m',
-        'tds_ppm',
-        'orp_mv',
-
         'reading_time'
     ];
 
