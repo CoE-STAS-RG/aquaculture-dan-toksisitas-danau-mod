@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FishFeedingController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\LanguageController;
 use App\Models\Device;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,6 +62,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/devices/{device}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
     Route::put('/devices/{device}', [DeviceController::class, 'update'])->name('devices.update');
     Route::delete('/devices/{device}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+
+    // Language switch route
+    Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 });
 
 require __DIR__.'/auth.php';

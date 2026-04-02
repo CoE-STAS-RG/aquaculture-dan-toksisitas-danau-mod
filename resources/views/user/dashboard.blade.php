@@ -18,7 +18,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Total Perangkat</p>
+                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('ui.total_devices') }}</p>
                             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ auth()->user()->devices->count() }}</p>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Perangkat Aktif</p>
+                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('ui.active_devices') }}</p>
                             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ auth()->user()->devices()->has('readings')->count() }}</p>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             </svg>
                         </div>
                         <div>
-                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Update Terakhir</p>
+                            <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('ui.last_update') }}</p>
                             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                                 @php
     				$latestReading = $latestReadings->first();
@@ -56,7 +56,7 @@
 				@if($latestReading)
                                     {{ $latestReading->created_at->diffForHumans() }}
                                 @else
-                                    Belum ada data
+                                    {{ __('ui.no_data_yet') }}
                                 @endif
                             </p>
                         </div>
@@ -68,15 +68,15 @@
             <div class="mb-6 overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 bg-white dark:bg-gray-800">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Daftar Perangkat Anda</h3>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('ui.your_devices_list') }}</h3>
                         <a href="{{ route('devices.create') }}" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Tambah Perangkat
+                            {{ __('ui.add_device') }}
                         </a>
                     </div>
 
                     @if(auth()->user()->devices->isEmpty())
                         <div class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-400">
-                            <p>Anda belum memiliki perangkat. Tambahkan perangkat untuk memulai monitoring.</p>
+                            <p>{{ __('ui.no_devices_yet') }}</p>
                         </div>
                     @else
                         <div class="overflow-x-auto">
@@ -84,19 +84,19 @@
                                 <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Nama Perangkat
+                                            {{ __('ui.device_name') }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Kode Device
+                                            {{ __('ui.device_code') }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Lokasi
+                                            {{ __('ui.location') }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Update Terakhir
+                                            {{ __('ui.last_updated') }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Aksi
+                                            {{ __('ui.actions') }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -137,19 +137,19 @@
                                             </td>
                                             <td class="px-6 py-4 text-sm font-medium whitespace-nowrap flex space-x-2">
                                                 <a href="{{ route('devices.show', $device->id) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                                                    Detail
+                                                    {{ __('ui.detail') }}
                                                 </a>
 
                                                 <button onclick="openEditModal({{ $device->id }}, '{{ $device->name }}', '{{ $device->device_code }}', '{{ $device->location ?? '' }}', '{{ $device->description ?? '' }}')" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300">
-                                                    Edit
+                                                    {{ __('ui.edit') }}
                                                 </button>
 
 
-                                                <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus perangkat ini?')">
+                                                <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('{{ __('ui.confirm_delete') }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                                                        Hapus
+                                                        {{ __('ui.delete') }}
                                                     </button>
                                                 </form>
                                             </td>
@@ -166,38 +166,38 @@
             <!-- Modal Edit Perangkat -->
             <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center flex bg-black bg-opacity-50">
                 <div class="m-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6 ">
-                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Edit Perangkat</h2>
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">{{ __('ui.edit_device') }}</h2>
                     <form id="editDeviceForm" method="POST">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="device_id" id="editDeviceId">
 
                         <div class="mb-4">
-                            <label for="editName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Perangkat</label>
+                            <label for="editName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.device_name') }}</label>
                             <input type="text" id="editName" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
 
                         <div class="mb-4">
-                            <label for="editCode" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kode Device</label>
+                            <label for="editCode" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.device_code') }}</label>
                             <input type="text" id="editCode" name="device_code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
 
                         <div class="mb-4">
-                            <label for="editLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi</label>
+                            <label for="editLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.location') }}</label>
                             <input type="text" id="editLocation" name="location" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
 
                         <div class="mb-4">
-                            <label for="editDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
+                            <label for="editDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.description') }}</label>
                             <textarea id="editDescription" name="description" rows="3" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
                         </div>
 
                         <div class="flex justify-end space-x-2">
                             <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">
-                                Batal
+                                {{ __('ui.cancel') }}
                             </button>
                             <button type="submit" class="px-4 py-2 text-black bg-yellow-600 rounded hover:bg-yellow-700">
-                                Simpan
+                                {{ __('ui.save') }}
                             </button>
                         </div>
                     </form>
@@ -231,11 +231,11 @@
             <!-- Recent Readings Section -->
             <div class="overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 bg-white dark:bg-gray-800">
-                    <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">Pembacaan Terakhir</h3>
+                    <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('ui.recent_readings') }}</h3>
 
                     @if($latestReadings->isEmpty())
                         <div class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-400">
-                            <p>Belum ada data pembacaan dari perangkat Anda.</p>
+                            <p>{{ __('ui.no_readings_yet') }}</p>
                         </div>
                     @else
                         <div class="overflow-x-auto">
@@ -243,10 +243,10 @@
                                 <thead class="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Perangkat
+                                            {{ __('ui.device') }}
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Waktu
+                                            {{ __('ui.time') }}
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
                                             Water Temp (°C)
@@ -270,7 +270,7 @@
                                             ORP (mV)
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            Risiko
+                                            {{ __('ui.risk') }}
                                         </th>
                                     </tr>
                                 </thead>

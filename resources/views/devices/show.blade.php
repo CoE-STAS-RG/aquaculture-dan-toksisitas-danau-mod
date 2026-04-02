@@ -9,22 +9,22 @@
                     {{-- Info Box --}}
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-blue-100 shadow-md  dark:bg-blue-900 p-4 rounded">
-                            <h3 class="font-bold">Device Code</h3>
+                            <h3 class="font-bold">{{ __('ui.device_code') }}</h3>
                             <p>{{ $device->device_code }}</p>
                         </div>
                         <div class="bg-green-100  shadow-md dark:bg-green-900 p-4 rounded">
-                            <h3 class="font-bold">Location</h3>
-                            <p>{{ $device->location ?? 'Not set' }}</p>
+                            <h3 class="font-bold">{{ __('ui.location') }}</h3>
+                            <p>{{ $device->location ?? __('ui.not_set') }}</p>
                         </div>
                         <div class="bg-yellow-100 shadow-md dark:bg-yellow-900 p-4 rounded col-span-2">
-                            <h3 class="font-bold">Description</h3>
-                            <p>{{ $device->description ?? 'No description' }}</p>
+                            <h3 class="font-bold">{{ __('ui.description') }}</h3>
+                            <p>{{ $device->description ?? __('ui.no_description') }}</p>
                         </div>
                     </div>
 
                     {{-- Notification --}}
                     <div class="bg-red-100 shadow-md dark:bg-red-900 p-4 rounded mb-4">
-                        <h3 class="font-bold text-red-800 dark:text-white">Alert</h3>
+                        <h3 class="font-bold text-red-800 dark:text-white">{{ __('ui.alert') }}</h3>
                         <div id="notification-message" class="mt-2 text-sm text-red-700 dark:text-red-300"></div>
                     </div>
                    {{-- Grafik Sensor - Grid 2x2 --}}
@@ -75,13 +75,13 @@
                     {{-- Filter --}}
                     <div class="mb-4 mt-10">
                         <form method="GET" action="{{ route('devices.show', $device->id) }}">
-                            <label for="filter" class="mr-2 font-semibold">Filter Waktu:</label>
+                            <label for="filter" class="mr-2 font-semibold">{{ __('ui.filter_time') }}</label>
                             <select name="filter" id="filter" onchange="this.form.submit()" class="dark:bg-gray-700 dark:text-white border rounded px-3 py-1">
-                                <option value="">-- Semua --</option>
-                                <option value="daily" {{ request('filter') === 'daily' ? 'selected' : '' }}>Harian</option>
-                                <option value="weekly" {{ request('filter') === 'weekly' ? 'selected' : '' }}>Mingguan</option>
-                                <option value="monthly" {{ request('filter') === 'monthly' ? 'selected' : '' }}>Bulanan</option>
-                                <option value="yearly" {{ request('filter') === 'yearly' ? 'selected' : '' }}>Tahunan</option>
+                                <option value="">{{ __('ui.all') }}</option>
+                                <option value="daily" {{ request('filter') === 'daily' ? 'selected' : '' }}>{{ __('ui.daily') }}</option>
+                                <option value="weekly" {{ request('filter') === 'weekly' ? 'selected' : '' }}>{{ __('ui.weekly') }}</option>
+                                <option value="monthly" {{ request('filter') === 'monthly' ? 'selected' : '' }}>{{ __('ui.monthly') }}</option>
+                                <option value="yearly" {{ request('filter') === 'yearly' ? 'selected' : '' }}>{{ __('ui.yearly') }}</option>
                             </select>
                         </form>
                     </div>
@@ -92,17 +92,17 @@
     <span class="inline-flex items-center px-2 py-1 mr-2 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded">
         ESP A
     </span>
-    Sensor Lama (Suhu, pH, DO)
+    {{ __('ui.old_sensor') }}
 </h3>
 <div class="bg-white dark:bg-gray-800 shadow-md overflow-x-auto rounded">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
         <thead class="bg-blue-100 dark:bg-gray-700">
             <tr>
-                <th class="px-4 py-2">Waktu</th>
+                <th class="px-4 py-2">{{ __('ui.time') }}</th>
                 <th class="px-4 py-2">Water Temp (°C)</th>
                 <th class="px-4 py-2">pH</th>
                 <th class="px-4 py-2">DO (mg/L)</th>
-                <th class="px-4 py-2">Risiko</th>
+                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -114,11 +114,11 @@
                     <td class="px-4 py-2">{{ $r->dissolved_oxygen ?? '-' }}</td>
                     <td class="px-4 py-2">
                         @php $risk = $r->risk_level ?? 0; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full 
-                            {{ ($risk > 70) 
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' 
-                            : (($risk > 30) 
-                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' 
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {{ ($risk > 70)
+                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                            : (($risk > 30)
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                             : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
                             {{ number_format($risk, 1) }}%
                         </span>
@@ -127,7 +127,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
-                        Tidak ada data sensor lama
+                        {{ __('ui.no_old_sensor_data') }}
                     </td>
                 </tr>
             @endforelse
@@ -140,18 +140,18 @@
     <span class="inline-flex items-center px-2 py-1 mr-2 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded">
         ESP B
     </span>
-    Sensor Baru (Turbidity, EC, TDS, ORP)
+    {{ __('ui.new_sensor') }}
 </h3>
 <div class="bg-white dark:bg-gray-800 shadow-md overflow-x-auto rounded">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
         <thead class="bg-purple-100 dark:bg-gray-700">
             <tr>
-                <th class="px-4 py-2">Waktu</th>
+                <th class="px-4 py-2">{{ __('ui.time') }}</th>
                 <th class="px-4 py-2">Turbidity (NTU)</th>
                 <th class="px-4 py-2">EC (S/m)</th>
                 <th class="px-4 py-2">TDS (PPM)</th>
                 <th class="px-4 py-2">ORP (mV)</th>
-                <th class="px-4 py-2">Risiko</th>
+                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -164,11 +164,11 @@
                     <td class="px-4 py-2">{{ $r->orp_mv ?? '-' }}</td>
                     <td class="px-4 py-2">
                         @php $risk = $r->risk_level ?? 0; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full 
-                            {{ ($risk > 70) 
-    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' 
-    : (($risk > 30) 
-        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' 
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {{ ($risk > 70)
+    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+    : (($risk > 30)
+        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
         : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
                             {{ number_format($risk, 1) }}%
                         </span>
@@ -177,7 +177,7 @@
             @empty
                 <tr>
                     <td colspan="6" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
-                        Tidak ada data sensor baru
+                        {{ __('ui.no_new_sensor_data') }}
                     </td>
                 </tr>
             @endforelse
