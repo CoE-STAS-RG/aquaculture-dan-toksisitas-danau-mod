@@ -48,7 +48,7 @@ return [
     'monthly' => 'Monthly',
     'yearly' => 'Yearly',
     'old_sensor' => 'Old Sensor (Temperature, pH, DO)',
-    'new_sensor' => 'New Sensor (Turbidity, EC, TDS, ORP)',
+    'new_sensor' => 'New Sensor (Turbidity, EC, TDS, TDS EC Mod, ORP)',
     'no_old_sensor_data' => 'No old sensor data',
     'no_new_sensor_data' => 'No new sensor data',
     'not_set' => 'Not set',

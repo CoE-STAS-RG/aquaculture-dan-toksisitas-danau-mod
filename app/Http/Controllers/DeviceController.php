@@ -116,7 +116,7 @@ public function show($deviceId, Request $request)
         ->get();
 
     foreach ($readingsLama as $r) {
-        $timeStr = $r->reading_time->format('d M Y H:i');
+        $timeStr = $r->reading_time->format('d M Y H:i:s');
         if ($r->ph !== null && ($r->ph < $thresholds['ph']['min'] || $r->ph > $thresholds['ph']['max'])) {
             $notifications[] = "pH berada di luar batas normal ({$r->ph}) pada {$timeStr}";
         }
@@ -135,7 +135,7 @@ public function show($deviceId, Request $request)
         ->get();
 
     foreach ($readingsBaru as $r) {
-        $timeStr = $r->reading_time->format('d M Y H:i');
+        $timeStr = $r->reading_time->format('d M Y H:i:s');
         if ($r->turbidity_ntu !== null && $r->turbidity_ntu > $thresholds['turbidity_ntu']['max']) {
             $notifications[] = "Turbidity tinggi ({$r->turbidity_ntu} NTU) pada {$timeStr}";
         }
@@ -223,13 +223,13 @@ public function show($deviceId, Request $request)
         }
 
         $readings = SensorReading::where('device_id', $device->id)
-            ->select('reading_time', 'env_temperature', 'water_temperature', 'ph', 'dissolved_oxygen', 'turbidity_ntu', 'ec_s_m', 'tds_ppm', 'orp_mv', 'risk_level')
+            ->select('reading_time', 'env_temperature', 'water_temperature', 'ph', 'dissolved_oxygen', 'turbidity_ntu', 'ec_s_m', 'tds_ppm', 'tds_ec_mod', 'orp_mv', 'risk_level')
             ->orderBy('reading_time', 'desc')
             ->limit(10)
             ->get()
             ->map(function ($reading) {
                 return [
-                    'time' => $reading->reading_time->format('d-m-Y H:i'),
+                    'time' => $reading->reading_time->format('d-m-Y H:i:s'),
                     'env_temperature' => $reading->env_temperature,
                     'water_temperature' => $reading->water_temperature,
                     'ph' => $reading->ph,
@@ -237,6 +237,7 @@ public function show($deviceId, Request $request)
                     'turbidity_ntu' => $reading->turbidity_ntu,
                     'ec_s_m' => $reading->ec_s_m,
                     'tds_ppm' => $reading->tds_ppm,
+                    'tds_ec_mod' => $reading->tds_ec_mod,
                     'orp_mv' => $reading->orp_mv,
                     'risk' => $reading->risk_level
                 ];

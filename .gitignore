@@ -54,3 +54,7 @@ ehthumbs.db
 *.local.json
 .vercel
 vercel.json
+
+#Claude
+.claude.md
+.claude/    

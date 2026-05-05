@@ -55,7 +55,7 @@
 
     {{-- EC --}}
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
-        <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">EC (S/m)</h3>
+        <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">EC (µS/cm)</h3>
         <canvas id="ecChart" height="120"></canvas>
     </div>
 
@@ -65,8 +65,14 @@
         <canvas id="tdsChart" height="120"></canvas>
     </div>
 
+    {{-- TDS EC Mod --}}
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
+        <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">TDS EC Mod (mg/L)</h3>
+        <canvas id="tdsEcModChart" height="120"></canvas>
+    </div>
+
     {{-- ORP --}}
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 md:col-span-2">
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4">
         <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">ORP (mV)</h3>
         <canvas id="orpChart" height="120"></canvas>
     </div>
@@ -102,31 +108,19 @@
                 <th class="px-4 py-2">Water Temp (°C)</th>
                 <th class="px-4 py-2">pH</th>
                 <th class="px-4 py-2">DO (mg/L)</th>
-                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             @forelse($readingLama as $r)
                 <tr>
-                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i') }}</td>
+                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i:s') }}</td>
                     <td class="px-4 py-2">{{ $r->water_temperature ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $r->ph ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $r->dissolved_oxygen ?? '-' }}</td>
-                    <td class="px-4 py-2">
-                        @php $risk = $r->risk_level ?? 0; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full
-                            {{ ($risk > 70)
-                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                            : (($risk > 30)
-                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
-                            {{ number_format($risk, 1) }}%
-                        </span>
-                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
+                    <td colspan="4" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
                         {{ __('ui.no_old_sensor_data') }}
                     </td>
                 </tr>
@@ -148,31 +142,21 @@
             <tr>
                 <th class="px-4 py-2">{{ __('ui.time') }}</th>
                 <th class="px-4 py-2">Turbidity (NTU)</th>
-                <th class="px-4 py-2">EC (S/m)</th>
+                <th class="px-4 py-2">EC (µS/cm)</th>
                 <th class="px-4 py-2">TDS (PPM)</th>
+                <th class="px-4 py-2">TDS EC Mod (mg/L)</th>
                 <th class="px-4 py-2">ORP (mV)</th>
-                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             @forelse($readingBaru as $r)
                 <tr>
-                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i') }}</td>
+                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i:s') }}</td>
                     <td class="px-4 py-2">{{ $r->turbidity_ntu ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $r->ec_s_m ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $r->tds_ppm ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->tds_ec_mod ?? '-' }}</td>
                     <td class="px-4 py-2">{{ $r->orp_mv ?? '-' }}</td>
-                    <td class="px-4 py-2">
-                        @php $risk = $r->risk_level ?? 0; @endphp
-                        <span class="px-2 py-1 text-xs rounded-full
-                            {{ ($risk > 70)
-    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-    : (($risk > 30)
-        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
-                            {{ number_format($risk, 1) }}%
-                        </span>
-                    </td>
                 </tr>
             @empty
                 <tr>
@@ -374,10 +358,11 @@
     const phData = @json($chartLama->pluck('ph'));
     const doData = @json($chartLama->pluck('dissolved_oxygen'));
 
-    const labelsBaru = @json($chartBaru->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i')));
+    const labelsBaru = @json($chartBaru->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i:s')));
     const turbidityData = @json($chartBaru->pluck('turbidity_ntu'));
     const ecData = @json($chartBaru->pluck('ec_s_m'));
     const tdsData = @json($chartBaru->pluck('tds_ppm'));
+    const tdsEcModData = @json($chartBaru->pluck('tds_ec_mod'));
     const orpData = @json($chartBaru->pluck('orp_mv'));
 
     // === INISIALISASI CHART ===
@@ -407,13 +392,19 @@
 
     new Chart(document.getElementById('ecChart').getContext('2d'), {
         type: 'line',
-        data: { labels: labelsBaru, datasets: [{ label: 'EC (S/m)', data: ecData.map(safeNum), borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3 }] },
+        data: { labels: labelsBaru, datasets: [{ label: 'EC (µS/cm)', data: ecData.map(safeNum), borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3 }] },
         options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
     });
 
     new Chart(document.getElementById('tdsChart').getContext('2d'), {
         type: 'line',
         data: { labels: labelsBaru, datasets: [{ label: 'TDS (PPM)', data: tdsData.map(safeNum), borderColor: '#ec4899', backgroundColor: 'rgba(236, 72, 153, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('tdsEcModChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsBaru, datasets: [{ label: 'TDS EC Mod (mg/L)', data: tdsEcModData.map(safeNum), borderColor: '#0ea5e9', backgroundColor: 'rgba(14, 165, 233, 0.1)', fill: true, tension: 0.3 }] },
         options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
     });
 

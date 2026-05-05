@@ -261,16 +261,16 @@
                                             Turbidity (NTU)
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            EC (S/m)
+                                            EC (µS/cm)
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
                                             TDS (PPM)
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            ORP (mV)
+                                            TDS EC Mod (mg/L)
                                         </th>
                                         <th scope="col" class="px-4 py-2 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                                            {{ __('ui.risk') }}
+                                            ORP (mV)
                                         </th>
                                     </tr>
                                 </thead>
@@ -281,7 +281,7 @@
                                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $reading->device->name }}</div>
                                             </td>
                                             <td class="px-4 py-2 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->created_at->format('d M Y H:i') }}</div>
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->created_at->format('d M Y H:i:s') }}</div>
                                             </td>
                                             <td class="px-4 py-2 whitespace-nowrap">
                                                 <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->water_temperature ?? '-' }}</div>
@@ -302,22 +302,10 @@
                                                 <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->tds_ppm ?? '-' }}</div>
                                             </td>
                                             <td class="px-4 py-2 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->orp_mv ?? '-' }}</div>
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->tds_ec_mod ?? '-' }}</div>
                                             </td>
                                             <td class="px-4 py-2 whitespace-nowrap">
-                                                @php
-                                                    $riskClass = '';
-                                                    if ($reading->risk_level > 70) {
-                                                        $riskClass = 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-                                                    } elseif ($reading->risk_level > 30) {
-                                                        $riskClass = 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-                                                    } else {
-                                                        $riskClass = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-                                                    }
-                                                @endphp
-                                                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $riskClass }}">
-                                                    {{ $reading->risk_level ?? '-' }}
-                                                </span>
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $reading->orp_mv ?? '-' }}</div>
                                             </td>
                                         </tr>
                                     @endforeach

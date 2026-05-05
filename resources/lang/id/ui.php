@@ -48,7 +48,7 @@ return [
     'monthly' => 'Bulanan',
     'yearly' => 'Tahunan',
     'old_sensor' => 'Sensor Lama (Suhu, pH, DO)',
-    'new_sensor' => 'Sensor Baru (Turbidity, EC, TDS, ORP)',
+    'new_sensor' => 'Sensor Baru (Turbidity, EC, TDS, TDS EC Mod, ORP)',
     'no_old_sensor_data' => 'Tidak ada data sensor lama',
     'no_new_sensor_data' => 'Tidak ada data sensor baru',
     'not_set' => 'Belum diatur',

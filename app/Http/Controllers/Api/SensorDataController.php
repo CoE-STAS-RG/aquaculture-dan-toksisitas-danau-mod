@@ -39,8 +39,9 @@ class SensorDataController extends Controller
         'turbidity_ntu' => $request['turbidity_ntu'],
         'ec_s_m' => $request['ec_s_m'],
         'tds_ppm' => $request['tds_ppm'],
+        'tds_ec_mod' => $request['tds_ec_mod'] ?? null,
         'orp_mv' => $request['orp_mv'],
-        'reading_time' => now(), // atau sync timestamp dari basic
+        'reading_time' => now(),
     ]);
 
     return response()->json([
