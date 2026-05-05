@@ -9,22 +9,22 @@
                     {{-- Info Box --}}
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-blue-100 shadow-md  dark:bg-blue-900 p-4 rounded">
-                            <h3 class="font-bold">Device Code</h3>
+                            <h3 class="font-bold">{{ __('ui.device_code') }}</h3>
                             <p>{{ $device->device_code }}</p>
                         </div>
                         <div class="bg-green-100  shadow-md dark:bg-green-900 p-4 rounded">
-                            <h3 class="font-bold">Location</h3>
-                            <p>{{ $device->location ?? 'Not set' }}</p>
+                            <h3 class="font-bold">{{ __('ui.location') }}</h3>
+                            <p>{{ $device->location ?? __('ui.not_set') }}</p>
                         </div>
                         <div class="bg-yellow-100 shadow-md dark:bg-yellow-900 p-4 rounded col-span-2">
-                            <h3 class="font-bold">Description</h3>
-                            <p>{{ $device->description ?? 'No description' }}</p>
+                            <h3 class="font-bold">{{ __('ui.description') }}</h3>
+                            <p>{{ $device->description ?? __('ui.no_description') }}</p>
                         </div>
                     </div>
 
                     {{-- Notification --}}
                     <div class="bg-red-100 shadow-md dark:bg-red-900 p-4 rounded mb-4">
-                        <h3 class="font-bold text-red-800 dark:text-white">Alert</h3>
+                        <h3 class="font-bold text-red-800 dark:text-white">{{ __('ui.alert') }}</h3>
                         <div id="notification-message" class="mt-2 text-sm text-red-700 dark:text-red-300"></div>
                     </div>
                    {{-- Grafik Sensor - Grid 2x2 --}}
@@ -75,60 +75,117 @@
                     {{-- Filter --}}
                     <div class="mb-4 mt-10">
                         <form method="GET" action="{{ route('devices.show', $device->id) }}">
-                            <label for="filter" class="mr-2 font-semibold">Filter Waktu:</label>
+                            <label for="filter" class="mr-2 font-semibold">{{ __('ui.filter_time') }}</label>
                             <select name="filter" id="filter" onchange="this.form.submit()" class="dark:bg-gray-700 dark:text-white border rounded px-3 py-1">
-                                <option value="">-- Semua --</option>
-                                <option value="daily" {{ request('filter') === 'daily' ? 'selected' : '' }}>Harian</option>
-                                <option value="weekly" {{ request('filter') === 'weekly' ? 'selected' : '' }}>Mingguan</option>
-                                <option value="monthly" {{ request('filter') === 'monthly' ? 'selected' : '' }}>Bulanan</option>
-                                <option value="yearly" {{ request('filter') === 'yearly' ? 'selected' : '' }}>Tahunan</option>
+                                <option value="">{{ __('ui.all') }}</option>
+                                <option value="daily" {{ request('filter') === 'daily' ? 'selected' : '' }}>{{ __('ui.daily') }}</option>
+                                <option value="weekly" {{ request('filter') === 'weekly' ? 'selected' : '' }}>{{ __('ui.weekly') }}</option>
+                                <option value="monthly" {{ request('filter') === 'monthly' ? 'selected' : '' }}>{{ __('ui.monthly') }}</option>
+                                <option value="yearly" {{ request('filter') === 'yearly' ? 'selected' : '' }}>{{ __('ui.yearly') }}</option>
                             </select>
                         </form>
                     </div>
 
 
-                    {{-- Table --}}
-
-                    <h3 class="text-lg font-semibold mb-4">Latest Readings</h3>
+                    {{-- Tabel Sensor Lama --}}
+<h3 class="text-lg font-semibold mt-8 flex items-center">
+    <span class="inline-flex items-center px-2 py-1 mr-2 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded">
+        ESP A
+    </span>
+    {{ __('ui.old_sensor') }}
+</h3>
 <div class="bg-white dark:bg-gray-800 shadow-md overflow-x-auto rounded">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
         <thead class="bg-blue-100 dark:bg-gray-700">
             <tr>
-                <th class="px-4 py-2">Waktu</th>
+                <th class="px-4 py-2">{{ __('ui.time') }}</th>
                 <th class="px-4 py-2">Water Temp (°C)</th>
                 <th class="px-4 py-2">pH</th>
                 <th class="px-4 py-2">DO (mg/L)</th>
-                <th class="px-4 py-2">Turbidity (NTU)</th>
-                <th class="px-4 py-2">EC (S/m)</th>
-                <th class="px-4 py-2">TDS (PPM)</th>
-                <th class="px-4 py-2">ORP (mV)</th>
-                <th class="px-4 py-2">Risiko</th>
+                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            @forelse($readings as $reading)
+            @forelse($readingLama as $r)
                 <tr>
-                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($reading->reading_time)->format('d-m-Y H:i') }}</td>
-                    <td class="px-4 py-2">{{ $reading->water_temperature ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->ph ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->dissolved_oxygen ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->turbidity_ntu ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->ec_s_m ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->tds_ppm ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->orp_mv ?? '-' }}</td>
-                    <td class="px-4 py-2">{{ $reading->risk_level ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i') }}</td>
+                    <td class="px-4 py-2">{{ $r->water_temperature ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->ph ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->dissolved_oxygen ?? '-' }}</td>
+                    <td class="px-4 py-2">
+                        @php $risk = $r->risk_level ?? 0; @endphp
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {{ ($risk > 70)
+                            ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                            : (($risk > 30)
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
+                            {{ number_format($risk, 1) }}%
+                        </span>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">Tidak ada data.</td>
+                    <td colspan="5" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
+                        {{ __('ui.no_old_sensor_data') }}
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
+</div>
 
-    <div class="mt-4 px-4 mb-5">
-        {{ $readings->withQueryString()->links() }}
-    </div>
+{{-- Tabel Sensor Baru --}}
+<h3 class="text-lg font-semibold mt-8 flex items-center">
+    <span class="inline-flex items-center px-2 py-1 mr-2 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded">
+        ESP B
+    </span>
+    {{ __('ui.new_sensor') }}
+</h3>
+<div class="bg-white dark:bg-gray-800 shadow-md overflow-x-auto rounded">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
+        <thead class="bg-purple-100 dark:bg-gray-700">
+            <tr>
+                <th class="px-4 py-2">{{ __('ui.time') }}</th>
+                <th class="px-4 py-2">Turbidity (NTU)</th>
+                <th class="px-4 py-2">EC (S/m)</th>
+                <th class="px-4 py-2">TDS (PPM)</th>
+                <th class="px-4 py-2">ORP (mV)</th>
+                <th class="px-4 py-2">{{ __('ui.risk') }}</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            @forelse($readingBaru as $r)
+                <tr>
+                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($r->reading_time)->format('d-m-Y H:i') }}</td>
+                    <td class="px-4 py-2">{{ $r->turbidity_ntu ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->ec_s_m ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->tds_ppm ?? '-' }}</td>
+                    <td class="px-4 py-2">{{ $r->orp_mv ?? '-' }}</td>
+                    <td class="px-4 py-2">
+                        @php $risk = $r->risk_level ?? 0; @endphp
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {{ ($risk > 70)
+    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+    : (($risk > 30)
+        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200') }}">
+                            {{ number_format($risk, 1) }}%
+                        </span>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="px-4 py-2 text-center text-gray-500 dark:text-gray-400">
+                        {{ __('ui.no_new_sensor_data') }}
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+
 </div>
 
                 </div>
@@ -139,7 +196,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // === Chart Lama (Suhu, pH, DO) ===
     const tempCtx = document.getElementById('tempChart').getContext('2d');
     const phCtx = document.getElementById('phChart').getContext('2d');
     const doCtx = document.getElementById('doChart').getContext('2d');
@@ -306,105 +362,67 @@
 </script>
 
     {{-- termometer chart --}}
-
-    <script>
-    const deviceCode = "{{ $device->device_code }}";
-
-    async function fetchLatestData() {
-        try {
-            const response = await fetch(`/api/sensor-data/device/${deviceCode}`);
-            const result = await response.json();
-
-            if (result.status === "success" && Array.isArray(result.data)) {
-                // Ambil max 10 data terbaru
-                const latest = result.data.slice(0, 10).reverse();
-                const labels = latest.map(r =>
-                    new Date(r.reading_time).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                );
-
-                // Helper: aman untuk null/undefined
-                const safeValue = (val) => val == null ? null : parseFloat(val);
-
-                // Update chart lama
-                tempChart.data.labels = labels;
-                tempChart.data.datasets[0].data = latest.map(r => safeValue(r.water_temperature));
-                tempChart.update();
-
-                phChart.data.labels = labels;
-                phChart.data.datasets[0].data = latest.map(r => safeValue(r.ph));
-                phChart.update();
-
-                doChart.data.labels = labels;
-                doChart.data.datasets[0].data = latest.map(r => safeValue(r.dissolved_oxygen));
-                doChart.update();
-
-                // Update chart baru
-                turbidityChart.data.labels = labels;
-                turbidityChart.data.datasets[0].data = latest.map(r => safeValue(r.turbidity_ntu));
-                turbidityChart.update();
-
-                ecChart.data.labels = labels;
-                ecChart.data.datasets[0].data = latest.map(r => safeValue(r.ec_s_m));
-                ecChart.update();
-
-                tdsChart.data.labels = labels;
-                tdsChart.data.datasets[0].data = latest.map(r => safeValue(r.tds_ppm));
-                tdsChart.update();
-
-                orpChart.data.labels = labels;
-                orpChart.data.datasets[0].data = latest.map(r => safeValue(r.orp_mv));
-                orpChart.update();
-
-                // Update tabel
-                const tableBody = document.querySelector("tbody");
-                if (tableBody) {
-                    const rows = latest.map(reading => {
-                        const time = new Date(reading.reading_time).toLocaleString('id-ID');
-                        return `
-                            <tr>
-                                <td class="px-4 py-2">${time}</td>
-                                <td class="px-4 py-2">${safeValue(reading.water_temperature) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.ph) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.dissolved_oxygen) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.turbidity_ntu) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.ec_s_m) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.tds_ppm) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.orp_mv) ?? '-'}</td>
-                                <td class="px-4 py-2">${safeValue(reading.risk_level) ?? '-'}</td>
-                            </tr>
-                        `;
-                    }).join("");
-                    tableBody.innerHTML = rows;
-                }
-            }
-        } catch (err) {
-            console.error('Error fetching sensor data:', err);
-        }
+<script>
+    // Helper: aman untuk null
+    function safeNum(val) {
+        return val == null ? null : parseFloat(val);
     }
 
-    // Jalankan pertama kali
-    fetchLatestData();
-    setInterval(fetchLatestData, 5000);
+    // === DATA UNTUK CHART ===
+    const labelsLama = @json($chartLama->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i')));
+    const tempData = @json($chartLama->pluck('water_temperature'));
+    const phData = @json($chartLama->pluck('ph'));
+    const doData = @json($chartLama->pluck('dissolved_oxygen'));
+
+    const labelsBaru = @json($chartBaru->pluck('reading_time')->map(fn($t) => \Carbon\Carbon::parse($t)->format('H:i')));
+    const turbidityData = @json($chartBaru->pluck('turbidity_ntu'));
+    const ecData = @json($chartBaru->pluck('ec_s_m'));
+    const tdsData = @json($chartBaru->pluck('tds_ppm'));
+    const orpData = @json($chartBaru->pluck('orp_mv'));
+
+    // === INISIALISASI CHART ===
+    new Chart(document.getElementById('tempChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsLama, datasets: [{ label: 'Suhu (°C)', data: tempData.map(safeNum), borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('phChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsLama, datasets: [{ label: 'pH', data: phData.map(safeNum), borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: false, min: 0, max: 14 } } }
+    });
+
+    new Chart(document.getElementById('doChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsLama, datasets: [{ label: 'DO (mg/L)', data: doData.map(safeNum), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('turbidityChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsBaru, datasets: [{ label: 'Turbidity (NTU)', data: turbidityData.map(safeNum), borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('ecChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsBaru, datasets: [{ label: 'EC (S/m)', data: ecData.map(safeNum), borderColor: '#8b5cf6', backgroundColor: 'rgba(139, 92, 246, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('tdsChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsBaru, datasets: [{ label: 'TDS (PPM)', data: tdsData.map(safeNum), borderColor: '#ec4899', backgroundColor: 'rgba(236, 72, 153, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('orpChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: labelsBaru, datasets: [{ label: 'ORP (mV)', data: orpData.map(safeNum), borderColor: '#64748b', backgroundColor: 'rgba(100, 116, 139, 0.1)', fill: true, tension: 0.3 }] },
+        options: { responsive: true, scales: { x: { display: false }, y: { beginAtZero: false } } }
+    });
 </script>
 
-
-    <script>
-        const notifications = @json($notifications);
-        let currentIndex = 0;
-        const displayElement = document.getElementById('notification-message');
-
-        function showNextNotification() {
-            if (notifications.length === 0) {
-                displayElement.innerText = "Semua parameter dalam batas normal.";
-                return;
-            }
-
-            displayElement.innerText = notifications[currentIndex];
-            currentIndex = (currentIndex + 1) % notifications.length;
-        }
-
-        showNextNotification(); // tampilkan pertama kali
-        setInterval(showNextNotification, 3000); // ganti setiap 3 detik
-    </script>
 
 </x-app-layout>
