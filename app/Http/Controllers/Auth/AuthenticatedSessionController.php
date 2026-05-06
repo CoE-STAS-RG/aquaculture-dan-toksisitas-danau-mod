@@ -25,8 +25,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-        // Jangan regenerate session - allow multiple device login
-        // $request->session()->regenerate();
+        $request->session()->regenerate();
 
         // Tambahkan pengecekan role
         if (Auth::user()->role === 'admin') {
