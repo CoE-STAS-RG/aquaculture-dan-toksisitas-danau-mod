@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Device;
 use App\Models\SensorReading;
+use App\Models\WaterQualityReading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
