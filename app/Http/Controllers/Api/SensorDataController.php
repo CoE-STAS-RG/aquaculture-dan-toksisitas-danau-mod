@@ -25,13 +25,18 @@ class SensorDataController extends Controller
 
     // Simpan data dasar
     $basic = SensorReading::create([
-        'device_id' => $device->id,
-        'env_temperature' => $request['env_temperature'],
+        'device_id'         => $device->id,
+        'env_temperature'   => $request['env_temperature'],
         'water_temperature' => $request['water_temperature'],
-        'ph' => $request['ph'],
-        'dissolved_oxygen' => $request['dissolved_oxygen'],
-        'risk_level' => $request['risk_level'] ?? null,
-        'reading_time' => now(),
+        'ph'                => $request['ph'],
+        'dissolved_oxygen'  => $request['dissolved_oxygen'],
+        'risk_level'        => $request['risk_level'] ?? null,
+        'turbidity_ntu'     => $request['turbidity_ntu'] ?? null,
+        'ec_s_m'            => $request['ec_s_m'] ?? null,
+        'tds_ppm'           => $request['tds_ppm'] ?? null,
+        'tds_ec_mod'        => $request['tds_ec_mod'] ?? null,
+        'orp_mv'            => $request['orp_mv'] ?? null,
+        'reading_time'      => now(),
     ]);
 
     // Simpan data kualitas air (sensor baru)

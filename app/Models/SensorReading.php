@@ -39,7 +39,11 @@ class SensorReading extends Model
         'ph',
         'dissolved_oxygen',
         'risk_level',
+        'turbidity_ntu',
+        'ec_s_m',
+        'tds_ppm',
         'tds_ec_mod',
+        'orp_mv',
         'reading_time'
     ];
 
