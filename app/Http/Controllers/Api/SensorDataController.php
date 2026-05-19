@@ -13,7 +13,7 @@ class SensorDataController extends Controller
 {
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($reque gist->all(), [
             'device_code' => 'required|exists:devices,device_code',
             'suhuDHT' => 'required|numeric',
             'suhu' => 'required|numeric',
