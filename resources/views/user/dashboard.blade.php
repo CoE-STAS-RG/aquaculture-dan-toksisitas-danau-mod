@@ -1443,9 +1443,7 @@
                     <span class="aq-eyebrow">Aquaculture Monitoring</span>
                     <h1>Dashboard kualitas air untuk ternak ikan.</h1>
                     <p>
-                        Tampilan ini saya arahkan ke nuansa monitoring modern seperti referensi, tetapi konteksnya
-                        disesuaikan untuk pembacaan suhu air, pH, dissolved oxygen, turbidity, EC, TDS, dan ORP
-                        pada kolam budidaya.
+                        Monitoring Kualitas Air untuk Budidaya Ikan
                     </p>
 
                     <div class="aq-hero-actions">
