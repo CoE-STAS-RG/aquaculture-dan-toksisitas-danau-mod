@@ -1,54 +1,55 @@
 <section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+    <div class="aq-profile-section-head">
+        <div>
+            <h3>Zona bahaya</h3>
+            <p class="aq-profile-danger-copy">
+                Jika akun dihapus, akses ke data profil dan resource yang terkait akan berhenti permanen.
+            </p>
+        </div>
+        <span class="aq-profile-section-badge">Permanent</span>
+    </div>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Setelah akun Anda dihapus, semua sumber daya dan datanya akan dihapus secara permanen. Sebelum menghapus akun Anda, harap unduh data atau informasi apa pun yang ingin Anda simpan.') }}
-        </p>
-    </header>
+    <div class="aq-profile-inline-meta">
+        <span class="aq-profile-inline-note">Pastikan password Anda siap untuk konfirmasi akhir.</span>
+        <span class="aq-profile-inline-note">Tindakan ini tidak bisa dibatalkan.</span>
+    </div>
 
     <x-danger-button
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+        class="!bg-transparent !p-0 !shadow-none !text-inherit"
+    >
+        <span class="aq-profile-danger-btn">Hapus akun</span>
+    </x-danger-button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+        <form method="post" action="{{ route('profile.destroy') }}" class="aq-profile-modal-card">
             @csrf
             @method('delete')
 
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Apakah kamu yakin ingin menghapus akun?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Setelah akun Anda dihapus, semua sumber daya dan datanya akan dihapus secara permanen. Masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda ingin menghapus akun Anda secara permanen.') }}
+            <h3>Yakin ingin menghapus akun?</h3>
+            <p>
+                Setelah akun dihapus, semua data yang terkait akan dihapus permanen. Masukkan password
+                Anda untuk mengonfirmasi tindakan ini.
             </p>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    id="password"
+            <div class="aq-profile-field mt-6">
+                <label for="delete_profile_password">Password</label>
+                <input
+                    id="delete_profile_password"
                     name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                    placeholder="Masukkan password Anda"
+                >
+                <x-input-error :messages="$errors->userDeletion->get('password')" class="text-sm text-red-500" />
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
+            <div class="aq-profile-modal-actions">
+                <x-secondary-button x-on:click="$dispatch('close')" class="!rounded-xl !px-5 !py-3">
+                    Batal
                 </x-secondary-button>
 
-                <x-danger-button class="ms-3">
-                    {{ __('Hapus Akun') }}
-                </x-danger-button>
+                <button type="submit" class="aq-profile-danger-btn">Ya, hapus akun</button>
             </div>
         </form>
     </x-modal>

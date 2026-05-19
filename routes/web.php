@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FishFeedingController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\LanguageController;
 use App\Models\Device;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,12 +42,22 @@ Route::middleware(['auth', 'role:user'])->group(function () {
             ->limit(20)
             ->get();
 
-        $latestReadings = \App\Models\SensorReading::whereIn('device_id', $devices->pluck('id'))
+        $deviceIds = $devices->pluck('id');
+
+        $latestReadings = \App\Models\SensorReading::whereIn('device_id', $deviceIds)
             ->with('device:id,name,device_code')
             ->latest('reading_time')
             ->paginate(10);
 
-        return view('user.dashboard', compact('devices', 'latestReadings'));
+        $trendReadings = \App\Models\SensorReading::whereIn('device_id', $deviceIds)
+            ->with('device:id,name,device_code')
+            ->latest('reading_time')
+            ->limit(12)
+            ->get()
+            ->sortBy('reading_time')
+            ->values();
+
+        return view('user.dashboard', compact('devices', 'latestReadings', 'trendReadings'));
     })->name('user.dashboard');
 
     Route::get('/user/manajemen-ikan', [FishFeedingController::class, 'index'])->name('index-fish');
@@ -61,6 +72,9 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/devices/{device}/edit', [DeviceController::class, 'edit'])->name('devices.edit');
     Route::put('/devices/{device}', [DeviceController::class, 'update'])->name('devices.update');
     Route::delete('/devices/{device}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+
+    // Language switch route
+    Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 });
 
 require __DIR__.'/auth.php';

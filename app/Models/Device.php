@@ -58,4 +58,11 @@ class Device extends Model
     {
         return $this->hasMany(SensorReading::class, 'device_id', 'id');
     }
+    public function latestReadings()
+{
+    return $this->sensorReadings()
+        ->with('waterQuality') // jika pakai relasi 1:1 berdasarkan waktu
+        ->latest()
+        ->take(10);
+}
 }
