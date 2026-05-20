@@ -1575,7 +1575,7 @@
                                     </div>
                                     <div class="aq-readout">
                                         <span>EC</span>
-                                        <strong>{{ $formatMetric($primaryCard['reading']->ec_s_m, 4, ' S/m') }}</strong>
+                                        <strong>{{ $formatMetric($primaryCard['reading']->ec_s_m, 4, ' us/m') }}</strong>
                                     </div>
                                     <div class="aq-readout">
                                         <span>TDS</span>
@@ -1853,7 +1853,7 @@
                                     </div>
                                     <div class="aq-activity-value">
                                         <span>EC</span>
-                                        <strong>{{ $formatMetric($latestOverall->ec_s_m, 4, ' S/m') }}</strong>
+                                        <strong>{{ $formatMetric($latestOverall->ec_s_m, 4, ' us/m') }}</strong>
                                     </div>
                                     <div class="aq-activity-value">
                                         <span>TDS</span>
