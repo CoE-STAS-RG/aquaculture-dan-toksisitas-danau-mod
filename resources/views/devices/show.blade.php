@@ -854,9 +854,9 @@
                                             <span class="metric-card__label">Conductivity</span>
                                             <h3>EC</h3>
                                         </div>
-                                        <span class="metric-card__badge">S/m</span>
+                                        <span class="metric-card__badge">us/m</span>
                                     </div>
-                                    <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->ec_s_m, 4) }} <small>S/m</small></div>
+                                    <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->ec_s_m, 4) }} <small>us/m</small></div>
                                     <p class="metric-card__hint">Memberi gambaran total ion terlarut di air.</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="ecChart"></canvas>
@@ -1017,7 +1017,7 @@
                                                 <td>
                                                     <div class="reading-value">
                                                         <span class="reading-value__label">Conduct</span>
-                                                        <span class="reading-value__number">{{ $formatMetric($reading->ec_s_m, 4, ' S/m') }}</span>
+                                                        <span class="reading-value__number">{{ $formatMetric($reading->ec_s_m, 4, ' us/m') }}</span>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -1217,7 +1217,7 @@
             id: 'ecChart',
             labels: labelsQuality,
             data: ecData,
-            label: 'EC (S/m)',
+            label: 'EC (us/m)',
             borderColor: '#8b5cf6',
             fillTop: 'rgba(139, 92, 246, 0.24)',
             fillBottom: 'rgba(139, 92, 246, 0.02)'

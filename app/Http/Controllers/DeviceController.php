@@ -141,7 +141,7 @@ public function show($deviceId, Request $request)
             $notifications[] = "Turbidity tinggi ({$r->turbidity_ntu} NTU) pada {$timeStr}";
         }
         if ($r->ec_s_m !== null && $r->ec_s_m > $thresholds['ec_s_m']['max']) {
-            $notifications[] = "Konduktivitas tinggi ({$r->ec_s_m} S/m) pada {$timeStr}";
+            $notifications[] = "Konduktivitas tinggi ({$r->ec_s_m} us/m) pada {$timeStr}";
         }
         if ($r->tds_ppm !== null && $r->tds_ppm > $thresholds['tds_ppm']['max']) {
             $notifications[] = "TDS tinggi ({$r->tds_ppm} PPM) pada {$timeStr}";
