@@ -116,10 +116,10 @@ public function show($deviceId, Request $request)
     // === NOTIFIKASI: gabung dari dua sumber ===
     $notifications = [];
 
-    // Dari SensorReading (lama)
+    // Dari pembacaan sensor terbaru saja
     $readingsLama = \App\Models\SensorReading::where('device_id', $device->id)
         ->orderBy('reading_time', 'desc')
-        ->limit(100)
+        ->limit(1)
         ->get();
 
     foreach ($readingsLama as $r) {
