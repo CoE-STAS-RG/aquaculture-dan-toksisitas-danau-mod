@@ -1,9 +1,9 @@
 <section>
     <div class="aq-profile-section-head">
         <div>
-            <h3>Informasi akun</h3>
+            <h3>{{ __('ui.account_info') }}</h3>
             <p>
-                Perbarui identitas utama yang tampil di dashboard, kartu akun, dan area monitoring.
+                {{ __('ui.account_info_desc') }}
             </p>
         </div>
         <span class="aq-profile-section-badge">Editable</span>
@@ -24,16 +24,16 @@
                 </div>
 
                 <div class="aq-profile-upload-actions">
-                    <label for="photo" class="aq-profile-upload-btn">Pilih foto profil</label>
+                    <label for="photo" class="aq-profile-upload-btn">{{ __('ui.choose_photo') }}</label>
                     <input id="photo" name="photo" type="file" class="hidden" accept="image/*">
-                    <span class="aq-profile-inline-note">JPG, PNG, GIF hingga 2MB</span>
+                    <span class="aq-profile-inline-note">{{ __('ui.photo_hint') }}</span>
                     <x-input-error :messages="$errors->get('photo')" class="text-sm text-red-500" />
                 </div>
             </div>
 
             <div class="aq-profile-form-fields">
                 <div class="aq-profile-field">
-                    <label for="name">Nama lengkap</label>
+                    <label for="name">{{ __('ui.full_name') }}</label>
                     <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" autocomplete="name">
                     <x-input-error :messages="$errors->get('name')" class="text-sm text-red-500" />
                 </div>
@@ -45,18 +45,18 @@
                 </div>
 
                 <div class="aq-profile-field">
-                    <label for="phone">Nomor telepon</label>
+                    <label for="phone">{{ __('ui.phone_number') }}</label>
                     <input id="phone" name="phone" type="tel" value="{{ old('phone', $user->phone) }}" autocomplete="tel">
                     <x-input-error :messages="$errors->get('phone')" class="text-sm text-red-500" />
                 </div>
 
                 <div class="aq-profile-inline-meta">
-                    <span class="aq-profile-inline-note">Role: {{ $profileRoleLabel }}</span>
-                    <span class="aq-profile-inline-note">Bahasa: {{ $profileLocaleLabel }}</span>
+                    <span class="aq-profile-inline-note">{{ __('ui.role') }}: {{ $profileRoleLabel }}</span>
+                    <span class="aq-profile-inline-note">{{ __('ui.language') }}: {{ $profileLocaleLabel }}</span>
                 </div>
 
                 <div class="aq-profile-actions">
-                    <button type="submit" class="aq-profile-primary-btn">Simpan perubahan</button>
+                    <button type="submit" class="aq-profile-primary-btn">{{ __('ui.save_changes') }}</button>
 
                     @if (session('status') === 'profile-updated')
                         <p
@@ -66,7 +66,7 @@
                             x-init="setTimeout(() => show = false, 2200)"
                             class="aq-profile-success"
                         >
-                            Profil berhasil diperbarui.
+                            {{ __('ui.profile_updated') }}
                         </p>
                     @endif
                 </div>

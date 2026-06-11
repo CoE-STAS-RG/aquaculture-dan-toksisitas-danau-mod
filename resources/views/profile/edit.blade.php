@@ -8,7 +8,7 @@
         $profileDeviceCount = $user->devices()->count();
         $profileLocaleLabel = session('locale', app()->getLocale()) === 'id' ? 'Indonesia' : 'English';
         $profileRoleLabel = ucfirst(str_replace('_', ' ', $user->role ?? 'member'));
-        $profilePhoneLabel = filled($user->phone ?? null) ? $user->phone : 'Belum ditambahkan';
+        $profilePhoneLabel = filled($user->phone ?? null) ? $user->phone : __('ui.not_added');
         $profileHomeRoute = ($user->role ?? null) === 'admin' ? route('admin.dashboard') : route('user.dashboard');
     @endphp
 
@@ -567,22 +567,20 @@
             <div class="aq-profile-intro">
                 <div class="aq-profile-intro-copy">
                     <span class="aq-profile-kicker">Profile Settings</span>
-                    <h1>Kelola akun dan identitas monitoring Anda.</h1>
+                    <h1>{{ __('ui.profile_title') }}</h1>
                     <p>
-                        Halaman ini saya rapikan agar selaras dengan dashboard baru. Informasi akun,
-                        foto profil, keamanan login, dan penghapusan akun sekarang terkumpul dalam
-                        satu layout yang lebih rapi.
+                        {{ __('ui.profile_intro') }}
                     </p>
                 </div>
 
                 <div class="aq-profile-chipbar">
                     <div class="aq-profile-chip">
                         <strong>{{ $profileDeviceCount }}</strong>
-                        <span>device terhubung</span>
+                        <span>{{ __('ui.devices_connected_label') }}</span>
                     </div>
                     <div class="aq-profile-chip">
                         <strong>{{ $profileLocaleLabel }}</strong>
-                        <span>bahasa aktif</span>
+                        <span>{{ __('ui.active_language_label') }}</span>
                     </div>
                 </div>
             </div>
@@ -592,7 +590,7 @@
                     <div class="aq-profile-summary-inner">
                         <div class="aq-profile-summary-top">
                             <span class="aq-profile-summary-tag">{{ $profileRoleLabel }}</span>
-                            <a href="{{ $profileHomeRoute }}" class="aq-profile-summary-action" aria-label="Kembali ke dashboard">
+                            <a href="{{ $profileHomeRoute }}" class="aq-profile-summary-action" aria-label="{{ __('ui.back_to_dashboard') }}">
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.25 7.5 12 3.75l3.75 3.75M12 4.5v15.75" transform="rotate(-90 12 12)" />
                                 </svg>
@@ -620,20 +618,20 @@
 
                         <div class="aq-profile-summary-stats">
                             <div class="aq-profile-stat">
-                                <span>Device</span>
-                                <strong>{{ $profileDeviceCount }} kolam aktif</strong>
+                                <span>{{ __('ui.device') }}</span>
+                                <strong>{{ __('ui.active_ponds', ['count' => $profileDeviceCount]) }}</strong>
                             </div>
                             <div class="aq-profile-stat">
-                                <span>Kontak</span>
-                                <strong>{{ filled($user->phone ?? null) ? 'Tersimpan' : 'Belum lengkap' }}</strong>
+                                <span>{{ __('ui.contact') }}</span>
+                                <strong>{{ filled($user->phone ?? null) ? __('ui.saved') : __('ui.incomplete') }}</strong>
                             </div>
                             <div class="aq-profile-stat">
                                 <span>Login</span>
-                                <strong>Akun terlindungi</strong>
+                                <strong>{{ __('ui.account_protected') }}</strong>
                             </div>
                             <div class="aq-profile-stat">
                                 <span>Panel</span>
-                                <strong>Siap dipakai</strong>
+                                <strong>{{ __('ui.ready_to_use') }}</strong>
                             </div>
                         </div>
                     </div>

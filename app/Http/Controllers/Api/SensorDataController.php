@@ -68,6 +68,21 @@ class SensorDataController extends Controller
         return $this->getByDeviceCode($request->device_code);
     }
 
+    /**
+     * Latest reading across all devices — powers the public landing page live card.
+     */
+    public function latest()
+    {
+        $reading = SensorReading::with('device:id,name,device_code,location')
+            ->orderBy('reading_time', 'desc')
+            ->first();
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $reading,
+        ]);
+    }
+
     public function getByDeviceCode($deviceCode)
     {
         $device = Device::where('device_code', $deviceCode)->first();

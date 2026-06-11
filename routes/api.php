@@ -15,6 +15,7 @@ Route::post('/login', [ApiLoginController::class, 'login']);
 
 Route::post('/sensor-data', [SensorDataController::class, 'store']);
 Route::get('/sensor-data', [SensorDataController::class, 'index']);
+Route::get('/sensor-data/latest', [SensorDataController::class, 'latest']);
 Route::get('/sensor-data/device/{deviceCode}', [SensorDataController::class, 'getByDeviceCode']);
 
 

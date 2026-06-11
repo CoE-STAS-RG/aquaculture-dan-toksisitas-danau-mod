@@ -1,9 +1,9 @@
 <section>
     <div class="aq-profile-section-head">
         <div>
-            <h3>Keamanan login</h3>
+            <h3>{{ __('ui.login_security') }}</h3>
             <p>
-                Ganti kata sandi untuk menjaga akses dashboard dan data sensor tetap aman.
+                {{ __('ui.login_security_desc') }}
             </p>
         </div>
         <span class="aq-profile-section-badge">Security</span>
@@ -14,7 +14,7 @@
         @method('put')
 
         <div class="aq-profile-field">
-            <label for="update_password_current_password">Password saat ini</label>
+            <label for="update_password_current_password">{{ __('ui.current_password') }}</label>
             <input
                 id="update_password_current_password"
                 name="current_password"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="aq-profile-field">
-            <label for="update_password_password">Password baru</label>
+            <label for="update_password_password">{{ __('ui.new_password') }}</label>
             <input
                 id="update_password_password"
                 name="password"
@@ -36,7 +36,7 @@
         </div>
 
         <div class="aq-profile-field">
-            <label for="update_password_password_confirmation">Konfirmasi password baru</label>
+            <label for="update_password_password_confirmation">{{ __('ui.confirm_new_password') }}</label>
             <input
                 id="update_password_password_confirmation"
                 name="password_confirmation"
@@ -47,7 +47,7 @@
         </div>
 
         <div class="aq-profile-actions">
-            <button type="submit" class="aq-profile-primary-btn">Perbarui password</button>
+            <button type="submit" class="aq-profile-primary-btn">{{ __('ui.update_password') }}</button>
 
             @if (session('status') === 'password-updated')
                 <p
@@ -57,7 +57,7 @@
                     x-init="setTimeout(() => show = false, 2200)"
                     class="aq-profile-success"
                 >
-                    Password berhasil diperbarui.
+                    {{ __('ui.password_updated') }}
                 </p>
             @endif
         </div>

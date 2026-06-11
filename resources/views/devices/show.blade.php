@@ -20,7 +20,7 @@
         $resolveRiskTone = function ($risk) {
             if ($risk === null) {
                 return [
-                    'label' => 'Belum dinilai',
+                    'label' => __('ui.risk_not_assessed'),
                     'class' => 'reading-status reading-status--neutral',
                     'score' => '--',
                 ];
@@ -30,7 +30,7 @@
 
             if ($risk >= 0.7) {
                 return [
-                    'label' => 'Kritis',
+                    'label' => __('ui.risk_critical'),
                     'class' => 'reading-status reading-status--critical',
                     'score' => $score,
                 ];
@@ -38,14 +38,14 @@
 
             if ($risk >= 0.35) {
                 return [
-                    'label' => 'Waspada',
+                    'label' => __('ui.risk_warning'),
                     'class' => 'reading-status reading-status--warning',
                     'score' => $score,
                 ];
             }
 
             return [
-                'label' => 'Optimal',
+                'label' => __('ui.risk_optimal'),
                 'class' => 'reading-status reading-status--safe',
                 'score' => $score,
             ];
@@ -751,7 +751,7 @@
                         <h3 class="font-bold text-red-800 dark:text-white">{{ __('ui.alert') }}</h3>
                         <div class="mt-2 text-sm text-red-700 dark:text-red-300">
                             @if (count($notifications) === 0)
-                                <p>Tidak ada alert saat ini.</p>
+                                <p>{{ __('ui.no_alerts') }}</p>
                             @else
                                 <ul class="space-y-1 list-disc list-inside">
                                     @foreach ($notifications as $notification)
@@ -766,23 +766,21 @@
                         <div class="metric-board__content">
                             <div class="metric-board__header">
                                 <div>
-                                    <span class="metric-board__eyebrow">Trend monitor</span>
-                                    <h2 class="metric-board__title">Chart pembacaan kualitas air</h2>
+                                    <span class="metric-board__eyebrow">{{ __('ui.trend_monitor') }}</span>
+                                    <h2 class="metric-board__title">{{ __('ui.trend_title') }}</h2>
                                     <p class="metric-board__subtitle">
-                                        Tampilan chart ini saya ubah ke gaya kartu modern seperti referensi:
-                                        lebih visual, lebih ringan dibaca, dan tetap menampilkan 20 titik data terbaru
-                                        dari perangkat {{ $device->name }}.
+                                        {{ __('ui.trend_subtitle', ['device' => $device->name]) }}
                                     </p>
                                 </div>
 
                                 <div class="metric-board__meta">
                                     <div class="metric-meta-card">
-                                        <span>Sync terakhir</span>
+                                        <span>{{ __('ui.last_sync') }}</span>
                                         <strong>{{ $latestSync }}</strong>
                                     </div>
                                     <div class="metric-meta-card">
-                                        <span>Device aktif</span>
-                                        <strong>{{ $device->name }}<br>{{ $device->location ?? 'Lokasi belum diatur' }}</strong>
+                                        <span>{{ __('ui.active_device') }}</span>
+                                        <strong>{{ $device->name }}<br>{{ $device->location ?? __('ui.location_not_set') }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -792,12 +790,12 @@
                                     <div class="metric-card__top">
                                         <div>
                                             <span class="metric-card__label">Water temperature</span>
-                                            <h3>Suhu Air</h3>
+                                            <h3>{{ __('ui.water_temp') }}</h3>
                                         </div>
-                                        <span class="metric-card__badge">20 titik terbaru</span>
+                                        <span class="metric-card__badge">{{ __('ui.latest_points') }}</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->water_temperature, 1) }} <small>C</small></div>
-                                    <p class="metric-card__hint">Rentang ideal umum 20 sampai 30 C untuk budidaya.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_temp') }}</p>
                                     <div class="metric-card__canvas metric-card__canvas--large">
                                         <canvas id="tempChart"></canvas>
                                     </div>
@@ -809,10 +807,10 @@
                                             <span class="metric-card__label">Acidity balance</span>
                                             <h3>pH</h3>
                                         </div>
-                                        <span class="metric-card__badge">Skala 0-14</span>
+                                        <span class="metric-card__badge">{{ __('ui.scale_0_14') }}</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->ph, 1) }}</div>
-                                    <p class="metric-card__hint">Batas aman umum 6.5 sampai 8.5.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_ph') }}</p>
                                     <div class="metric-card__canvas metric-card__canvas--large">
                                         <canvas id="phChart"></canvas>
                                     </div>
@@ -827,7 +825,7 @@
                                         <span class="metric-card__badge">Dissolved oxygen</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->dissolved_oxygen, 1) }} <small>mg/L</small></div>
-                                    <p class="metric-card__hint">Semakin stabil, semakin nyaman untuk ikan.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_do') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="doChart"></canvas>
                                     </div>
@@ -842,7 +840,7 @@
                                         <span class="metric-card__badge">NTU</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->turbidity_ntu, 1) }} <small>NTU</small></div>
-                                    <p class="metric-card__hint">Pantau kekeruhan agar kualitas air tetap terjaga.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_turbidity') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="turbidityChart"></canvas>
                                     </div>
@@ -857,7 +855,7 @@
                                         <span class="metric-card__badge">us/m</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->ec_s_m, 4) }} <small>us/m</small></div>
-                                    <p class="metric-card__hint">Memberi gambaran total ion terlarut di air.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_ec') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="ecChart"></canvas>
                                     </div>
@@ -872,7 +870,7 @@
                                         <span class="metric-card__badge">PPM</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->tds_ppm, 0) }} <small>ppm</small></div>
-                                    <p class="metric-card__hint">Melihat kepadatan partikel terlarut di perairan.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_tds') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="tdsChart"></canvas>
                                     </div>
@@ -887,7 +885,7 @@
                                         <span class="metric-card__badge">mg/L</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->tds_ec_mod, 1) }} <small>mg/L</small></div>
-                                    <p class="metric-card__hint">Nilai turunan untuk pembacaan kualitas air lanjutan.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_tds_ec_mod') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="tdsEcModChart"></canvas>
                                     </div>
@@ -902,7 +900,7 @@
                                         <span class="metric-card__badge">mV</span>
                                     </div>
                                     <div class="metric-card__value">{{ $formatMetric($latestChartPoint?->orp_mv, 0) }} <small>mV</small></div>
-                                    <p class="metric-card__hint">Menunjukkan kecenderungan oksidasi dan reduksi air.</p>
+                                    <p class="metric-card__hint">{{ __('ui.hint_orp') }}</p>
                                     <div class="metric-card__canvas">
                                         <canvas id="orpChart"></canvas>
                                     </div>
@@ -928,38 +926,37 @@
                         <div class="device-table-shell">
                             <div class="device-table-toolbar">
                                 <div>
-                                    <span class="device-table-pill">Sensor log</span>
-                                    <h3 class="device-section-title device-table-heading">Pembacaan Semua Sensor</h3>
+                                    <span class="device-table-pill">{{ __('ui.sensor_log') }}</span>
+                                    <h3 class="device-section-title device-table-heading">{{ __('ui.all_sensor_readings') }}</h3>
                                     <p class="device-table-note mt-1 text-sm">
-                                        Tabel ini saya ubah ke gaya data table modern seperti referensi. Tujuh parameter utama
-                                        tampil langsung di baris, dan semua data sensor sekarang bisa dibuka lewat nomor halaman di bawah.
+                                        {{ __('ui.sensor_table_note') }}
                                     </p>
                                 </div>
 
                                 <div class="device-table-summary">
                                     <div class="device-table-count">
                                         <strong>{{ number_format($rowCount, 0, ',', '.') }}</strong>
-                                        <span>total data sensor</span>
+                                        <span>{{ __('ui.total_sensor_data') }}</span>
                                     </div>
                                     <div class="device-table-count">
                                         <strong>{{ $latestSync }}</strong>
-                                        <span>sinkron terakhir</span>
+                                        <span>{{ __('ui.last_synced') }}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="device-table-surface">
                                 <div class="reading-table-head">
-                                    <span>Pembacaan</span>
-                                    <span>Suhu</span>
+                                    <span>{{ __('ui.reading') }}</span>
+                                    <span>{{ __('ui.temp_short') }}</span>
                                     <span>pH</span>
                                     <span>DO</span>
                                     <span>Turbidity</span>
                                     <span>EC</span>
                                     <span>TDS</span>
                                     <span>ORP</span>
-                                    <span>Status</span>
-                                    <span>Aksi</span>
+                                    <span>{{ __('ui.status') }}</span>
+                                    <span>{{ __('ui.actions') }}</span>
                                 </div>
 
                                 <div class="reading-list">
@@ -1035,20 +1032,20 @@
                                                 <td>
                                                     <div class="reading-status-wrap">
                                                         <span class="{{ $riskTone['class'] }}">{{ $riskTone['label'] }}</span>
-                                                        <span class="reading-risk-score">{{ $riskTone['score'] }} risiko</span>
+                                                        <span class="reading-risk-score">{{ $riskTone['score'] }} {{ __('ui.risk') }}</span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="reading-actions">
-                                                        <a class="table-action-link" href="#trend-monitor">Chart</a>
-                                                        <a class="table-action-link table-action-link--soft" href="#device-top">Atas</a>
+                                                        <a class="table-action-link" href="#trend-monitor">{{ __('ui.chart') }}</a>
+                                                        <a class="table-action-link table-action-link--soft" href="#device-top">{{ __('ui.top') }}</a>
                                                     </div>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
                                                 <td colspan="10" class="device-table-empty">
-                                                    Belum ada pembacaan sensor untuk device ini.
+                                                    {{ __('ui.no_sensor_readings') }}
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -1058,10 +1055,14 @@
 
                             <div class="device-table-footer">
                                 <span>
-                                    Menampilkan {{ number_format($pageFirstItem, 0, ',', '.') }}-{{ number_format($pageLastItem, 0, ',', '.') }}
-                                    dari {{ number_format($rowCount, 0, ',', '.') }} data sensor untuk perangkat {{ $device->name }}.
+                                    {{ __('ui.showing_entries', [
+                                        'first' => number_format($pageFirstItem, 0, ',', '.'),
+                                        'last' => number_format($pageLastItem, 0, ',', '.'),
+                                        'total' => number_format($rowCount, 0, ',', '.'),
+                                        'device' => $device->name,
+                                    ]) }}
                                 </span>
-                                <span>{{ $device->location ?? 'Lokasi perangkat belum diatur.' }}</span>
+                                <span>{{ $device->location ?? __('ui.device_location_not_set') }}</span>
                             </div>
 
                             @if ($combinedReadings->hasPages())

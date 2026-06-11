@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Manajemen Akun User') }}
+            {{ __('ui.user_account_management') }}
         </h2>
     </x-slot>
 
@@ -10,9 +10,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex justify-between mb-4">
-                        <h3 class="text-lg font-semibold">Daftar User</h3>
+                        <h3 class="text-lg font-semibold">{{ __('ui.user_list') }}</h3>
                         <a href="{{ route('users.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                            Tambah User Baru
+                            {{ __('ui.add_new_user') }}
                         </a>
                     </div>
 

@@ -10,7 +10,7 @@
     $navLocaleSwitch = session('locale', app()->getLocale()) === 'id' ? 'en' : 'id';
     $navLocaleSwitchLabel = $navLocaleSwitch === 'id' ? 'Bahasa Indonesia' : 'English';
     $navRoleLabel = ucfirst(str_replace('_', ' ', $navUser->role ?? 'member'));
-    $navPhoneLabel = filled($navUser->phone ?? null) ? $navUser->phone : 'Tambahkan di profil';
+    $navPhoneLabel = filled($navUser->phone ?? null) ? $navUser->phone : __('navigation.add_in_profile');
 @endphp
 
 <nav x-data="{ open: false }" class="aq-topnav">
@@ -624,7 +624,7 @@
             </span>
             <span class="aq-topnav__brand-copy">
                 <strong>Aquaculture</strong>
-                <span>Water quality monitoring</span>
+                <span>{{ __('navigation.brand_tagline') }}</span>
             </span>
         </a>
 
@@ -636,7 +636,7 @@
                 {{ __('navigation.growth_chart') }}
             </a>
             <a href="{{ route('devices.index') }}" class="aq-topnav__link {{ request()->routeIs('devices.*') ? 'is-active' : '' }}">
-                Devices
+                {{ __('navigation.devices') }}
             </a>
         </div>
 
@@ -712,15 +712,15 @@
 
                                 <div class="aq-topnav__account-meta">
                                     <div class="aq-topnav__account-meta-item">
-                                        <span>Akses</span>
+                                        <span>{{ __('navigation.access') }}</span>
                                         <strong>{{ $navRoleLabel }}</strong>
                                     </div>
                                     <div class="aq-topnav__account-meta-item">
-                                        <span>Device</span>
-                                        <strong>{{ $navDeviceCount }} terhubung</strong>
+                                        <span>{{ __('navigation.device') }}</span>
+                                        <strong>{{ $navDeviceCount }} {{ __('navigation.connected') }}</strong>
                                     </div>
                                     <div class="aq-topnav__account-meta-item">
-                                        <span>Bahasa</span>
+                                        <span>{{ __('navigation.language') }}</span>
                                         <strong>{{ $navLocaleLabel }}</strong>
                                     </div>
                                 </div>
@@ -735,8 +735,8 @@
                                             </svg>
                                         </span>
                                         <span class="aq-topnav__account-link-copy">
-                                            <strong>Profil & keamanan</strong>
-                                            <span>Perbarui data akun, kata sandi, dan detail login.</span>
+                                            <strong>{{ __('navigation.profile_security') }}</strong>
+                                            <span>{{ __('navigation.profile_security_desc') }}</span>
                                         </span>
                                     </span>
                                     <span class="aq-topnav__account-link-arrow">
@@ -755,8 +755,8 @@
                                             </svg>
                                         </span>
                                         <span class="aq-topnav__account-link-copy">
-                                            <strong>Perangkat & kolam</strong>
-                                            <span>Lihat semua device, lokasi kolam, dan pembacaan sensor.</span>
+                                            <strong>{{ __('navigation.devices_ponds') }}</strong>
+                                            <span>{{ __('navigation.devices_ponds_desc') }}</span>
                                         </span>
                                     </span>
                                     <span class="aq-topnav__account-link-arrow">
@@ -775,8 +775,8 @@
                                             </svg>
                                         </span>
                                         <span class="aq-topnav__account-link-copy">
-                                            <strong>Dashboard utama</strong>
-                                            <span>Kembali ke ringkasan farm dan aktivitas terbaru.</span>
+                                            <strong>{{ __('navigation.main_dashboard') }}</strong>
+                                            <span>{{ __('navigation.main_dashboard_desc') }}</span>
                                         </span>
                                     </span>
                                     <span class="aq-topnav__account-link-arrow">
@@ -794,8 +794,8 @@
                                             </svg>
                                         </span>
                                         <span class="aq-topnav__account-link-copy">
-                                            <strong>Bahasa</strong>
-                                            <span>Ganti cepat ke {{ $navLocaleSwitchLabel }}.</span>
+                                            <strong>{{ __('navigation.language') }}</strong>
+                                            <span>{{ __('navigation.quick_switch_to', ['lang' => $navLocaleSwitchLabel]) }}</span>
                                         </span>
                                     </span>
                                     <span class="aq-topnav__account-link-arrow">
@@ -820,7 +820,7 @@
                                         </span>
                                         <span class="aq-topnav__account-link-copy">
                                             <strong>{{ __('navigation.log_out') }}</strong>
-                                            <span>Akhiri sesi saat ini dari dashboard monitoring.</span>
+                                            <span>{{ __('navigation.logout_desc') }}</span>
                                         </span>
                                     </span>
                                     <span class="aq-topnav__account-link-arrow">
@@ -853,7 +853,7 @@
                 {{ __('navigation.growth_chart') }}
             </a>
             <a href="{{ route('devices.index') }}" class="aq-topnav__mobile-link {{ request()->routeIs('devices.*') ? 'is-active' : '' }}">
-                Devices
+                {{ __('navigation.devices') }}
             </a>
         </div>
 

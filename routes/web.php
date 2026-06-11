@@ -13,7 +13,11 @@ use App\Models\Device;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    $latestReading = \App\Models\SensorReading::with('device:id,name,device_code,location')
+        ->orderBy('reading_time', 'desc')
+        ->first();
+
+    return view('welcome', compact('latestReading'));
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

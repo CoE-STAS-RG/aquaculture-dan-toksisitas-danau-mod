@@ -28,7 +28,7 @@
         $evaluateReading = function ($reading) use ($thresholds) {
             if (! $reading) {
                 return [
-                    'label' => 'Belum ada data',
+                    'label' => __('ui.no_data_yet'),
                     'tone' => 'muted',
                     'score' => 0,
                     'issues' => [],
@@ -40,7 +40,7 @@
             if ($reading->water_temperature !== null &&
                 ($reading->water_temperature < $thresholds['water_temperature']['min'] ||
                     $reading->water_temperature > $thresholds['water_temperature']['max'])) {
-                $issues[] = 'Suhu air';
+                $issues[] = __('ui.water_temp');
             }
 
             if ($reading->ph !== null &&
@@ -76,13 +76,13 @@
             $healthScore = max(12, 100 - (count($issues) * 18) - (int) round($riskScore * 0.35));
 
             if (count($issues) === 0 && $riskScore < 35) {
-                $label = 'Optimal';
+                $label = __('ui.status_optimal');
                 $tone = 'good';
             } elseif (count($issues) <= 2 && $riskScore < 70) {
-                $label = 'Perlu perhatian';
+                $label = __('ui.status_attention');
                 $tone = 'watch';
             } else {
-                $label = 'Kritis';
+                $label = __('ui.status_critical');
                 $tone = 'risk';
             }
 
@@ -145,24 +145,24 @@
         $latestOverall = $latestReadings->getCollection()->first();
         $latestOverallTime = $latestOverall ? $timestampOf($latestOverall) : null;
         $latestOverallStatus = $latestOverall ? $evaluateReading($latestOverall) : null;
-        $lastSync = $latestOverallTime ? $latestOverallTime->diffForHumans() : 'Belum ada sinkronisasi';
+        $lastSync = $latestOverallTime ? $latestOverallTime->diffForHumans() : __('ui.no_sync');
 
         if ($liveDevicesCount === 0) {
             $farmTone = 'muted';
-            $farmStatus = 'Menunggu data pertama';
-            $farmMessage = 'Hubungkan perangkat dan kirim pembacaan sensor untuk mulai memantau kualitas air.';
+            $farmStatus = __('ui.farm_waiting_status');
+            $farmMessage = __('ui.farm_waiting_msg');
         } elseif ($stableDevicesCount === $liveDevicesCount) {
             $farmTone = 'good';
-            $farmStatus = 'Air kolam stabil';
-            $farmMessage = 'Mayoritas indikator kualitas air berada dalam rentang aman untuk budidaya ikan.';
+            $farmStatus = __('ui.farm_stable_status');
+            $farmMessage = __('ui.farm_stable_msg');
         } elseif ($stableDevicesCount >= max(1, (int) ceil($liveDevicesCount / 2))) {
             $farmTone = 'watch';
-            $farmStatus = 'Perlu perhatian ringan';
-            $farmMessage = 'Beberapa sensor mulai keluar dari rentang ideal, tetapi kondisi masih bisa dikendalikan.';
+            $farmStatus = __('ui.farm_watch_status');
+            $farmMessage = __('ui.farm_watch_msg');
         } else {
             $farmTone = 'risk';
-            $farmStatus = 'Perlu tindakan cepat';
-            $farmMessage = 'Ada cukup banyak indikator yang menyimpang dan perlu dicek segera di lapangan.';
+            $farmStatus = __('ui.farm_risk_status');
+            $farmMessage = __('ui.farm_risk_msg');
         }
 
         $trendLabels = $trendReadings
@@ -1441,44 +1441,44 @@
 
                 <div class="aq-hero-copy">
                     <span class="aq-eyebrow">Aquaculture Monitoring</span>
-                    <h1>Dashboard kualitas air untuk ternak ikan.</h1>
+                    <h1>{{ __('ui.hero_title') }}</h1>
                     <p>
-                        Monitoring Kualitas Air untuk Budidaya Ikan
+                        {{ __('ui.hero_subtitle') }}
                     </p>
 
                     <div class="aq-hero-actions">
-                        <a href="{{ route('devices.create') }}" class="aq-btn aq-btn-primary">Tambah device</a>
-                        <a href="{{ route('devices.index') }}" class="aq-btn aq-btn-secondary">Kelola perangkat</a>
+                        <a href="{{ route('devices.create') }}" class="aq-btn aq-btn-primary">{{ __('ui.add_device') }}</a>
+                        <a href="{{ route('devices.index') }}" class="aq-btn aq-btn-secondary">{{ __('ui.manage_devices') }}</a>
                     </div>
                 </div>
 
                 <div class="aq-hero-aside">
                     <div class="aq-status-banner">
-                        <span class="aq-status-label">Status farm</span>
+                        <span class="aq-status-label">{{ __('ui.farm_status_label') }}</span>
                         <strong>{{ $farmStatus }}</strong>
                         <p>{{ $farmMessage }}</p>
                     </div>
 
                     <div class="aq-hero-mini-grid">
                         <div class="aq-mini-stat">
-                            <span>Sync terbaru</span>
+                            <span>{{ __('ui.latest_sync') }}</span>
                             <strong>{{ $lastSync }}</strong>
-                            <p>Data diambil dari pembacaan sensor paling baru yang masuk ke dashboard.</p>
+                            <p>{{ __('ui.latest_sync_desc') }}</p>
                         </div>
                         <div class="aq-mini-stat">
-                            <span>Device aktif</span>
+                            <span>{{ __('ui.active_device') }}</span>
                             <strong>{{ $liveDevicesCount }}/{{ $deviceCount }}</strong>
-                            <p>{{ $stableDevicesCount }} device berada pada status stabil saat ini.</p>
+                            <p>{{ __('ui.devices_stable_now', ['count' => $stableDevicesCount]) }}</p>
                         </div>
                         <div class="aq-mini-stat">
-                            <span>Risiko rata-rata</span>
+                            <span>{{ __('ui.avg_risk') }}</span>
                             <strong>{{ $avgRiskRaw !== null ? $formatMetric($avgRiskRaw, 0, '%') : '--' }}</strong>
-                            <p>Semakin rendah nilainya, semakin aman kondisi air untuk budidaya.</p>
+                            <p>{{ __('ui.avg_risk_desc') }}</p>
                         </div>
                         <div class="aq-mini-stat">
-                            <span>Isu terdeteksi</span>
+                            <span>{{ __('ui.issues_detected') }}</span>
                             <strong>{{ $issueCount }}</strong>
-                            <p>Total indikator yang sedang keluar dari rentang aman pada device aktif.</p>
+                            <p>{{ __('ui.issues_detected_desc') }}</p>
                         </div>
                     </div>
                 </div>
@@ -1487,38 +1487,38 @@
             <section class="aq-metrics">
                 <article class="aq-metric-card" style="animation-delay: 0.05s;">
                     <div class="aq-metric-label">
-                        <span>Device terhubung</span>
+                        <span>{{ __('ui.connected_devices') }}</span>
                         <span>{{ $deviceCount > 0 ? '01' : '00' }}</span>
                     </div>
                     <div class="aq-metric-value">{{ $deviceCount }}</div>
-                    <div class="aq-metric-foot">Total unit monitoring yang sudah dipasangkan ke akun ini.</div>
+                    <div class="aq-metric-foot">{{ __('ui.connected_devices_desc') }}</div>
                 </article>
 
                 <article class="aq-metric-card" style="animation-delay: 0.1s;">
                     <div class="aq-metric-label">
-                        <span>pH rata-rata</span>
+                        <span>{{ __('ui.avg_ph') }}</span>
                         <span>02</span>
                     </div>
                     <div class="aq-metric-value">{{ $avgPhRaw !== null ? $formatMetric($avgPhRaw, 1) : '--' }}</div>
-                    <div class="aq-metric-foot">Target aman umumnya berada di kisaran 6.5 sampai 8.5.</div>
+                    <div class="aq-metric-foot">{{ __('ui.avg_ph_desc') }}</div>
                 </article>
 
                 <article class="aq-metric-card" style="animation-delay: 0.15s;">
                     <div class="aq-metric-label">
-                        <span>DO rata-rata</span>
+                        <span>{{ __('ui.avg_do') }}</span>
                         <span>03</span>
                     </div>
                     <div class="aq-metric-value">{{ $avgDoRaw !== null ? $formatMetric($avgDoRaw, 1, ' mg/L') : '--' }}</div>
-                    <div class="aq-metric-foot">Dissolved oxygen yang cukup menjaga ikan tetap aktif dan sehat.</div>
+                    <div class="aq-metric-foot">{{ __('ui.avg_do_desc') }}</div>
                 </article>
 
                 <article class="aq-metric-card" style="animation-delay: 0.2s;">
                     <div class="aq-metric-label">
-                        <span>Suhu air rata-rata</span>
+                        <span>{{ __('ui.avg_temp') }}</span>
                         <span>04</span>
                     </div>
                     <div class="aq-metric-value">{{ $avgTempRaw !== null ? $formatMetric($avgTempRaw, 1, ' C') : '--' }}</div>
-                    <div class="aq-metric-foot">Pantau suhu agar tidak keluar dari rentang ideal kolam budidaya.</div>
+                    <div class="aq-metric-foot">{{ __('ui.avg_temp_desc') }}</div>
                 </article>
             </section>
 
@@ -1526,8 +1526,8 @@
                 <div class="aq-panel">
                     <div class="aq-panel-header">
                         <div>
-                            <h2>Ringkasan kolam utama</h2>
-                            <p>Panel ini menjadi pusat baca cepat untuk kondisi air yang paling baru masuk.</p>
+                            <h2>{{ __('ui.main_pond_summary') }}</h2>
+                            <p>{{ __('ui.main_pond_summary_desc') }}</p>
                         </div>
                         <span class="aq-pill {{ $toneClass($farmTone) }}">{{ $farmStatus }}</span>
                     </div>
@@ -1542,20 +1542,19 @@
                                         </span>
                                         <h3 class="aq-stage-title">{{ $primaryCard['device']->name }}</h3>
                                         <p class="aq-stage-subtitle">
-                                            {{ $primaryCard['device']->location ?: 'Lokasi belum diisi' }}.
-                                            Device code: {{ $primaryCard['device']->device_code }}.
-                                            Sinkron terakhir {{ optional($primaryCard['timestamp'])->diffForHumans() }}.
+                                            {{ $primaryCard['device']->location ?: __('ui.location_empty') }}.
+                                            {{ __('ui.device_code_sync_line', ['code' => $primaryCard['device']->device_code, 'time' => optional($primaryCard['timestamp'])->diffForHumans()]) }}
                                         </p>
                                     </div>
                                     <div class="aq-chip">
-                                        <span>Health score</span>
+                                        <span>{{ __('ui.health_score') }}</span>
                                         <strong>{{ $primaryCard['status']['score'] }}/100</strong>
                                     </div>
                                 </div>
 
                                 <div class="aq-chip-row">
                             <div class="aq-chip">
-                                <span>Suhu air</span>
+                                <span>{{ __('ui.water_temp') }}</span>
                                 <strong>{{ $formatMetric($primaryCard['reading']->water_temperature, 1, ' C') }}</strong>
                             </div>
                                     <div class="aq-chip">
@@ -1589,10 +1588,9 @@
                             @else
                                 <div class="aq-focus-empty">
                                     <div>
-                                        <span class="aq-pill aq-pill-muted">Belum ada data</span>
+                                        <span class="aq-pill aq-pill-muted">{{ __('ui.no_data_yet') }}</span>
                                         <p class="aq-empty-note">
-                                            Tambahkan perangkat lalu kirim pembacaan sensor agar ringkasan kolam
-                                            utama bisa tampil di sini.
+                                            {{ __('ui.add_device_hint') }}
                                         </p>
                                     </div>
                                 </div>
@@ -1602,13 +1600,13 @@
                         <div class="aq-chart-card">
                             <div class="aq-panel-header">
                                 <div>
-                                    <h3>Tren kualitas air</h3>
-                                    <p>12 pembacaan terakhir untuk suhu air, pH, dan dissolved oxygen.</p>
+                                    <h3>{{ __('ui.water_quality_trend') }}</h3>
+                                    <p>{{ __('ui.water_quality_trend_desc') }}</p>
                                 </div>
                             </div>
 
                             <div class="aq-chart-meta">
-                                <span class="aq-temp">Suhu air</span>
+                                <span class="aq-temp">{{ __('ui.water_temp') }}</span>
                                 <span class="aq-ph">pH</span>
                                 <span class="aq-do">DO</span>
                             </div>
@@ -1620,9 +1618,9 @@
                             @else
                                 <div class="aq-focus-empty" style="min-height: 260px;">
                                     <div>
-                                        <span class="aq-pill aq-pill-muted">Belum ada tren</span>
+                                        <span class="aq-pill aq-pill-muted">{{ __('ui.no_trend') }}</span>
                                         <p class="aq-empty-note">
-                                            Grafik akan muncul otomatis setelah sensor mengirim beberapa pembacaan.
+                                            {{ __('ui.no_trend_desc') }}
                                         </p>
                                     </div>
                                 </div>
@@ -1634,8 +1632,8 @@
                 <aside class="aq-panel aq-focus-card">
                     <div class="aq-panel-header">
                         <div>
-                            <h3>Fokus monitoring</h3>
-                            <p>Ringkasan cepat untuk satu kolam yang paling baru aktif.</p>
+                            <h3>{{ __('ui.focus_monitoring') }}</h3>
+                            <p>{{ __('ui.focus_monitoring_desc') }}</p>
                         </div>
                     </div>
 
@@ -1647,18 +1645,18 @@
                                 </span>
                                 <p class="aq-focus-device">
                                     {{ $primaryCard['device']->name }}<br>
-                                    {{ $primaryCard['device']->location ?: 'Lokasi belum diisi' }}
+                                    {{ $primaryCard['device']->location ?: __('ui.location_empty') }}
                                 </p>
                             </div>
                             <div class="aq-chip">
-                                <span>Risk</span>
+                                <span>{{ __('ui.risk') }}</span>
                                 <strong>{{ $formatMetric($primaryCard['reading']->risk_level !== null ? $primaryCard['reading']->risk_level * 100 : null, 0, '%') }}</strong>
                             </div>
                         </div>
 
                         <div class="aq-gauge" style="--aq-score: {{ max(0, min(360, (int) round($primaryCard['status']['score'] * 3.6))) }};">
                             <div class="aq-gauge-inner">
-                                <span>Suhu air</span>
+                                <span>{{ __('ui.water_temp') }}</span>
                                 <strong>{{ $formatMetric($primaryCard['reading']->water_temperature, 1) }}</strong>
                                 <small>&deg;C</small>
                             </div>
@@ -1685,22 +1683,22 @@
 
                         <div class="aq-focus-actions">
                             <a href="{{ route('devices.show', $primaryCard['device']->id) }}" class="aq-btn-inline aq-btn-inline-primary">
-                                Lihat detail
+                                {{ __('ui.view_detail') }}
                             </a>
                             <button
                                 type="button"
                                 class="aq-btn-inline"
                                 onclick='openEditModal(@json($primaryEditPayload))'
                             >
-                                Edit device
+                                {{ __('ui.edit_device') }}
                             </button>
                         </div>
                     @else
                         <div class="aq-focus-empty">
                             <div>
-                                <span class="aq-pill aq-pill-muted">Belum ada device aktif</span>
+                                <span class="aq-pill aq-pill-muted">{{ __('ui.no_active_device') }}</span>
                                 <p class="aq-empty-note">
-                                    Begitu pembacaan sensor pertama masuk, panel fokus monitoring akan otomatis terisi.
+                                    {{ __('ui.no_active_device_desc') }}
                                 </p>
                             </div>
                         </div>
@@ -1712,16 +1710,15 @@
                 <div class="aq-panel">
                     <div class="aq-panel-header">
                         <div>
-                            <h3>Perangkat dan kolam</h3>
-                            <p>Setiap kartu menampilkan status air, pembacaan penting, dan aksi pengelolaan.</p>
+                            <h3>{{ __('ui.devices_ponds_heading') }}</h3>
+                            <p>{{ __('ui.devices_ponds_heading_desc') }}</p>
                         </div>
-                        <a href="{{ route('devices.create') }}" class="aq-btn-inline aq-btn-inline-primary">Tambah device</a>
+                        <a href="{{ route('devices.create') }}" class="aq-btn-inline aq-btn-inline-primary">{{ __('ui.add_device') }}</a>
                     </div>
 
                     @if ($deviceCards->isEmpty())
                         <div class="aq-empty-state">
-                            Belum ada perangkat yang terdaftar. Tambahkan device untuk mulai memonitor kualitas air
-                            kolam budidaya.
+                            {{ __('ui.no_devices_registered') }}
                         </div>
                     @else
                         <div class="aq-device-grid">
@@ -1740,7 +1737,7 @@
                                         <div>
                                             <h4 class="aq-device-name">{{ $card['device']->name }}</h4>
                                             <div class="aq-device-subtext">
-                                                {{ $card['device']->location ?: 'Lokasi belum diisi' }}
+                                                {{ $card['device']->location ?: __('ui.location_empty') }}
                                             </div>
                                         </div>
                                         <span class="aq-pill {{ $toneClass($card['status']['tone']) }}">
@@ -1751,18 +1748,18 @@
                                     <div class="aq-device-meta">
                                         <div class="aq-device-code">Code: {{ $card['device']->device_code }}</div>
                                         <div class="aq-device-subtext">
-                                            {{ $card['timestamp'] ? $card['timestamp']->diffForHumans() : 'Belum ada sinkronisasi' }}
+                                            {{ $card['timestamp'] ? $card['timestamp']->diffForHumans() : __('ui.no_sync') }}
                                         </div>
                                     </div>
 
                                     <div class="aq-device-subtext" style="margin-top: 10px;">
-                                        {{ $card['device']->description ? \Illuminate\Support\Str::limit($card['device']->description, 90) : 'Belum ada deskripsi perangkat.' }}
+                                        {{ $card['device']->description ? \Illuminate\Support\Str::limit($card['device']->description, 90) : __('ui.no_device_description') }}
                                     </div>
 
                                     @if ($card['reading'])
                                         <div class="aq-device-metrics">
                                             <div class="aq-device-metric">
-                                                <span>Suhu</span>
+                                                <span>{{ __('ui.temp_short') }}</span>
                                                 <strong>{{ $formatMetric($card['reading']->water_temperature, 1, ' C') }}</strong>
                                             </div>
                                             <div class="aq-device-metric">
@@ -1774,31 +1771,31 @@
                                                 <strong>{{ $formatMetric($card['reading']->dissolved_oxygen, 1, ' mg/L') }}</strong>
                                             </div>
                                             <div class="aq-device-metric">
-                                                <span>Risk</span>
+                                                <span>{{ __('ui.risk') }}</span>
                                                 <strong>{{ $formatMetric($card['reading']->risk_level !== null ? $card['reading']->risk_level * 100 : null, 0, '%') }}</strong>
                                             </div>
                                         </div>
                                     @else
                                         <div class="aq-empty-state" style="margin-top: 16px; padding: 18px;">
-                                            Device sudah terdaftar, tetapi belum ada data sensor yang masuk.
+                                            {{ __('ui.device_no_data') }}
                                         </div>
                                     @endif
 
                                     <div class="aq-device-actions">
                                         <a href="{{ route('devices.show', $card['device']->id) }}" class="aq-device-action">
-                                            Detail
+                                            {{ __('ui.detail') }}
                                         </a>
                                         <button
                                             type="button"
                                             class="aq-device-action aq-device-action-secondary"
                                             onclick='openEditModal(@json($deviceEditPayload))'
                                         >
-                                            Edit
+                                            {{ __('ui.edit') }}
                                         </button>
-                                        <form action="{{ route('devices.destroy', $card['device']->id) }}" method="POST" onsubmit="return confirm('Hapus device ini?')">
+                                        <form action="{{ route('devices.destroy', $card['device']->id) }}" method="POST" onsubmit="return confirm('{{ __('ui.confirm_delete') }}')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="aq-device-delete">Hapus</button>
+                                            <button type="submit" class="aq-device-delete">{{ __('ui.delete') }}</button>
                                         </form>
                                     </div>
                                 </article>
@@ -1810,14 +1807,14 @@
                 <div class="aq-panel">
                     <div class="aq-panel-header">
                         <div>
-                            <h3>Aktivitas pembacaan terbaru</h3>
-                            <p>Feed ini memudahkan Anda melihat nilai kunci sensor tanpa masuk ke detail device.</p>
+                            <h3>{{ __('ui.latest_activity') }}</h3>
+                            <p>{{ __('ui.latest_activity_desc') }}</p>
                         </div>
                     </div>
 
                     @if (! $latestOverall)
                         <div class="aq-empty-state">
-                            Belum ada pembacaan sensor yang tercatat untuk akun ini.
+                            {{ __('ui.no_readings_recorded') }}
                         </div>
                     @else
                         <div class="aq-activity-grid">
@@ -1836,7 +1833,7 @@
 
                                 <div class="aq-activity-values">
                                     <div class="aq-activity-value">
-                                        <span>Suhu</span>
+                                        <span>{{ __('ui.temp_short') }}</span>
                                         <strong>{{ $formatMetric($latestOverall->water_temperature, 1, ' C') }}</strong>
                                     </div>
                                     <div class="aq-activity-value">
@@ -1867,7 +1864,7 @@
 
                                 <div class="aq-focus-actions" style="margin-top: 12px;">
                                     <a href="{{ route('devices.show', $latestOverall->device->id) }}" class="aq-btn-inline aq-btn-inline-primary">
-                                        Lihat semua parameter
+                                        {{ __('ui.view_all_params') }}
                                     </a>
                                 </div>
                             </article>
@@ -1881,7 +1878,7 @@
     <div id="editModal" class="aq-modal">
         <div class="aq-modal-card">
             <div class="aq-modal-head">
-                <h3>Edit device</h3>
+                <h3>{{ __('ui.edit_device') }}</h3>
                 <button type="button" class="aq-modal-close" onclick="closeEditModal()">x</button>
             </div>
 
@@ -1891,29 +1888,29 @@
 
                 <div class="aq-modal-grid">
                     <div class="aq-modal-field">
-                        <label for="editName">Nama device</label>
+                        <label for="editName">{{ __('ui.device_name') }}</label>
                         <input type="text" id="editName" name="name" required>
                     </div>
 
                     <div class="aq-modal-field">
-                        <label for="editCode">Kode device</label>
+                        <label for="editCode">{{ __('ui.device_code') }}</label>
                         <input type="text" id="editCode" name="device_code" required>
                     </div>
 
                     <div class="aq-modal-field">
-                        <label for="editLocation">Lokasi</label>
+                        <label for="editLocation">{{ __('ui.location') }}</label>
                         <input type="text" id="editLocation" name="location">
                     </div>
 
                     <div class="aq-modal-field">
-                        <label for="editDescription">Deskripsi</label>
+                        <label for="editDescription">{{ __('ui.description') }}</label>
                         <textarea id="editDescription" name="description" rows="4"></textarea>
                     </div>
                 </div>
 
                 <div class="aq-modal-actions">
-                    <button type="button" class="aq-modal-cancel" onclick="closeEditModal()">Batal</button>
-                    <button type="submit" class="aq-modal-submit">Simpan perubahan</button>
+                    <button type="button" class="aq-modal-cancel" onclick="closeEditModal()">{{ __('ui.cancel') }}</button>
+                    <button type="submit" class="aq-modal-submit">{{ __('ui.save_changes') }}</button>
                 </div>
             </form>
         </div>
@@ -1973,7 +1970,7 @@
                     labels: trendLabels,
                     datasets: [
                         {
-                            label: 'Suhu air',
+                            label: '{{ __('ui.water_temp') }}',
                             data: trendTemperature,
                             borderColor: '#1875d1',
                             backgroundColor: 'rgba(24, 117, 209, 0.10)',

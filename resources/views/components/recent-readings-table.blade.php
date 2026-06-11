@@ -2,19 +2,19 @@
     <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
             <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Perangkat
+                {{ __('ui.device') }}
             </th>
             <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Waktu
+                {{ __('ui.time') }}
             </th>
             <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Suhu (°C)
+                {{ __('ui.temp_celsius') }}
             </th>
             <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                pH
+                {{ __('ui.ph') }}
             </th>
             <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                DO (mg/L)
+                {{ __('ui.do_mgl') }}
             </th>
         </tr>
     </thead>
@@ -40,7 +40,7 @@
         @empty
             <tr>
                 <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                    Belum ada data pembacaan dari perangkat Anda.
+                    {{ __('ui.no_readings_yet') }}
                 </td>
             </tr>
         @endforelse

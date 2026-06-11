@@ -1,25 +1,25 @@
 @if($devices->isEmpty())
     <div class="p-4 text-center text-gray-500 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-400">
-        <p>Anda belum memiliki perangkat. Tambahkan perangkat untuk memulai monitoring.</p>
+        <p>{{ __('ui.no_devices_yet') }}</p>
     </div>
 @else
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                    Nama Perangkat
+                    {{ __('ui.device_name') }}
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                    Kode Device
+                    {{ __('ui.device_code') }}
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                    Lokasi
+                    {{ __('ui.location') }}
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                    Update Terakhir
+                    {{ __('ui.last_updated') }}
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                    Aksi
+                    {{ __('ui.actions') }}
                 </th>
             </tr>
         </thead>
@@ -53,21 +53,21 @@
                         @if($device->readings->isNotEmpty())
                             <div class="text-sm text-gray-900 dark:text-gray-100">{{ $device->readings->first()->created_at->diffForHumans() }}</div>
                         @else
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Belum ada data</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('ui.no_data_yet') }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 text-sm font-medium whitespace-nowrap flex space-x-2">
                         <a href="{{ route('devices.show', $device->id) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                            Detail
+                            {{ __('ui.detail') }}
                         </a>
                         <button onclick="openEditModal({{ $device->id }}, '{{ $device->name }}', '{{ $device->device_code }}', '{{ $device->location ?? '' }}', '{{ $device->description ?? '' }}')" class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300">
-                            Edit
+                            {{ __('ui.edit') }}
                         </button>
-                        <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus perangkat ini?')">
+                        <form action="{{ route('devices.destroy', $device->id) }}" method="POST" onsubmit="return confirm('{{ __('ui.confirm_delete') }}')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                                Hapus
+                                {{ __('ui.delete') }}
                             </button>
                         </form>
                     </td>
