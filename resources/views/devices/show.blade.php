@@ -60,28 +60,166 @@
             --device-shadow: 0 22px 50px rgba(15, 23, 42, 0.12);
         }
 
-        .device-meta-card,
-        .device-alert-box,
         .metric-card,
         .device-table-shell {
             border: 1px solid var(--device-border);
             box-shadow: var(--device-shadow);
         }
 
-        .device-meta-card h3,
-        .device-alert-box h3,
         .metric-card h3,
         .device-section-title {
             color: var(--device-ink);
         }
 
-        .device-meta-card p,
-        .device-alert-box p,
-        .device-alert-box li,
         .metric-card p,
         .metric-card span,
         .device-table-note {
             color: var(--device-muted);
+        }
+
+        /* ── Device info cards ── */
+        .device-info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .device-info-card {
+            padding: 1.1rem 1.25rem;
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at top right, rgba(191, 219, 254, 0.22), transparent 55%),
+                rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(191, 219, 254, 0.5);
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.07);
+        }
+
+        .device-info-card--wide {
+            grid-column: span 2;
+        }
+
+        .device-info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .device-info-label {
+            display: block;
+            color: var(--device-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.35rem;
+        }
+
+        .device-info-value {
+            display: block;
+            color: var(--device-ink);
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        /* ── Alert panel ── */
+        .device-alert-panel {
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            border-radius: 22px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(254, 242, 242, 0.96) 100%);
+            box-shadow: 0 14px 32px rgba(239, 68, 68, 0.06);
+        }
+
+        .device-alert-header {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .device-alert-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            flex-shrink: 0;
+        }
+
+        .device-alert-title {
+            color: #991b1b;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .device-alert-none {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #9ca3af;
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        .device-alert-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .device-alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            padding: 0.6rem 0.85rem;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.12);
+            color: #b91c1c;
+            font-size: 0.84rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .device-alert-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #ef4444;
+            margin-top: 0.44rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 767px) {
+            .device-info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .device-info-card--wide {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .device-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .device-info-card--wide {
+                grid-column: span 1;
+            }
         }
 
         .device-table-shell {
@@ -732,34 +870,66 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="overflow-hidden sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
-                        <div class="device-meta-card p-4 bg-blue-100 rounded dark:bg-blue-900">
-                            <h3 class="font-bold">{{ __('ui.device_code') }}</h3>
-                            <p>{{ $device->device_code }}</p>
+                    <div class="device-info-grid">
+                        <div class="device-info-card">
+                            <div class="device-info-icon" style="background: rgba(37, 84, 223, 0.08); color: #2554df;">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
+                                </svg>
+                            </div>
+                            <span class="device-info-label">{{ __('ui.device_code') }}</span>
+                            <span class="device-info-value">{{ $device->device_code }}</span>
                         </div>
-                        <div class="device-meta-card p-4 bg-green-100 rounded dark:bg-green-900">
-                            <h3 class="font-bold">{{ __('ui.location') }}</h3>
-                            <p>{{ $device->location ?? __('ui.not_set') }}</p>
+
+                        <div class="device-info-card">
+                            <div class="device-info-icon" style="background: rgba(16, 185, 129, 0.08); color: #059669;">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                </svg>
+                            </div>
+                            <span class="device-info-label">{{ __('ui.location') }}</span>
+                            <span class="device-info-value">{{ $device->location ?? __('ui.not_set') }}</span>
                         </div>
-                        <div class="device-meta-card p-4 bg-yellow-100 rounded md:col-span-2 dark:bg-yellow-900">
-                            <h3 class="font-bold">{{ __('ui.description') }}</h3>
-                            <p>{{ $device->description ?? __('ui.no_description') }}</p>
+
+                        <div class="device-info-card device-info-card--wide">
+                            <div class="device-info-icon" style="background: rgba(245, 158, 11, 0.08); color: #d97706;">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                            </div>
+                            <span class="device-info-label">{{ __('ui.description') }}</span>
+                            <span class="device-info-value">{{ $device->description ?? __('ui.no_description') }}</span>
                         </div>
                     </div>
 
-                    <div class="device-alert-box p-4 mb-4 bg-red-100 rounded dark:bg-red-900">
-                        <h3 class="font-bold text-red-800 dark:text-white">{{ __('ui.alert') }}</h3>
-                        <div class="mt-2 text-sm text-red-700 dark:text-red-300">
-                            @if (count($notifications) === 0)
-                                <p>{{ __('ui.no_alerts') }}</p>
-                            @else
-                                <ul class="space-y-1 list-disc list-inside">
-                                    @foreach ($notifications as $notification)
-                                        <li>{{ $notification }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                    <div class="device-alert-panel">
+                        <div class="device-alert-header">
+                            <span class="device-alert-icon">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                </svg>
+                            </span>
+                            <span class="device-alert-title">{{ __('ui.alert') }}</span>
                         </div>
+
+                        @if (count($notifications) === 0)
+                            <p class="device-alert-none">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                {{ __('ui.no_alerts') }}
+                            </p>
+                        @else
+                            <ul class="device-alert-list">
+                                @foreach ($notifications as $notification)
+                                    <li class="device-alert-item">
+                                        <span class="device-alert-dot"></span>
+                                        {{ $notification }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
                     <section id="trend-monitor" class="metric-board">
